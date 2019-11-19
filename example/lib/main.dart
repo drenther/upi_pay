@@ -105,6 +105,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
               Container(
+                margin: EdgeInsets.only(top: 128),
                 child: FutureBuilder<List<ApplicationWithIcon>>(
                   future: _appsFuture,
                   builder: (context, snapshot) {
@@ -112,9 +113,16 @@ class _MyAppState extends State<MyApp> {
                       return Container();
                     }
 
-                    return Row(
+                    return GridView.count(
+                      crossAxisCount: 2,
+                      shrinkWrap: true,
+                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 8,
+                      childAspectRatio: 1.6,
                       children: snapshot.data
                           .map((it) => Container(
+                                color: Colors.grey[200],
+                                alignment: Alignment.center,
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
@@ -122,7 +130,10 @@ class _MyAppState extends State<MyApp> {
                                       it.icon,
                                       width: 64,
                                     ),
-                                    Text(it.appName),
+                                    Container(
+                                      margin: EdgeInsets.only(top: 4),
+                                      child: Text(it.appName),
+                                    ),
                                   ],
                                 ),
                               ))
