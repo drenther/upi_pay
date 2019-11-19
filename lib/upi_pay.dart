@@ -5,6 +5,9 @@ import 'package:meta/meta.dart';
 import 'package:flutter/services.dart';
 import 'package:upi_pay/upi_applications.dart';
 
+export 'package:upi_pay/upi_applications.dart';
+export 'package:device_apps/device_apps.dart' show Application;
+
 class InvalidUPIAddressException implements Exception {
   String message = 'Invalid UPI Address';
 
