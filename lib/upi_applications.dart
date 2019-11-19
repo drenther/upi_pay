@@ -48,7 +48,7 @@ class UPIApplications {
     UPIApplication.AmazonPay,
     UPIApplication.TrueCallerUPI,
     UPIApplication.MyAirtelUPI
-  ].map((app) => getUPIApplicationPackageName(app));
+  ].map((app) => getUPIApplicationPackageName(app)).toList();
 
   static Future<List<Application>> getAllInstalledUPIApplications() async {
     final allInstalledApps = await DeviceApps.getInstalledApplications(
