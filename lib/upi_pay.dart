@@ -23,6 +23,54 @@ class InvalidAmountException implements Exception {
   String toString() => this.message;
 }
 
+enum UpiTransactionStatus { Submitted, Success, Failure }
+
+class UpiTransactionResponse {
+  String txnId;
+  String responseCode;
+  String approvalRefNo;
+  UpiTransactionStatus status;
+  String txnRef;
+  String rawResponse;
+
+  UpiTransactionResponse(String responseString) {
+    this.rawResponse = responseString;
+
+    List<String> fragments = responseString.split('&');
+
+    fragments.forEach((fragment) {
+      List<String> keyValuePair = fragment.split('=');
+      String normalizedKey = keyValuePair.first.toLowerCase();
+      String value = keyValuePair.last;
+
+      switch (normalizedKey) {
+        case 'txnid':
+          this.txnId = value;
+          break;
+        case 'responsecode':
+          this.responseCode = value;
+          break;
+        case 'approvalrefno':
+          this.approvalRefNo = value;
+          break;
+        case 'status':
+          if (value.toLowerCase().contains('success')) {
+            this.status = UpiTransactionStatus.Success;
+          } else if (value.toLowerCase().contains('fail')) {
+            this.status = UpiTransactionStatus.Failure;
+          } else if (value.toLowerCase().contains('submitted')) {
+            this.status = UpiTransactionStatus.Submitted;
+          } else {
+            throw UnsupportedError('Unsupported UPI Transaction Status');
+          }
+          break;
+        case 'txnref':
+          this.txnRef = value;
+      }
+    });
+  }
+}
+
 class UpiPay {
   static const MethodChannel _channel = const MethodChannel('upi_pay');
 
@@ -84,7 +132,7 @@ class UpiPay {
   /// [transactionNote] (tn in UPI  Specification) - can be used to provide a short description of the transaction
   ///
   /// UPI Linking Specification - https://www.npci.org.in/sites/all/themes/npcl/images/PDF/UPI_Linking_Specs_ver_1.5.1.pdf
-  static Future<String> initiateTransaction(
+  static Future<UpiTransactionResponse> initiateTransaction(
       {@required UPIApplication app,
       @required String receiverUPIAddress,
       @required String receiverName,
@@ -111,7 +159,7 @@ class UpiPay {
           'Amount must be less then 1,00,000 since that is the upper limit per UPI transaction');
     }
 
-    final responseString = await _channel.invokeMethod('initiateTransaction', {
+    String responseString = await _channel.invokeMethod('initiateTransaction', {
       'app': app.toString(),
       'pa': receiverUPIAddress,
       'pn': receiverName,
@@ -122,7 +170,7 @@ class UpiPay {
       'tn': transactionNote,
     });
 
-    return responseString;
+    return UpiTransactionResponse(responseString);
   }
 
   // template method
