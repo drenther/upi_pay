@@ -68,11 +68,20 @@ class UPIApplications {
 
   static Future<List<ApplicationWithIcon>>
       getAllInstalledUPIApplications() async {
-    final allInstalledApps = await DeviceApps.getInstalledApplications(
+    var allInstalledApps = await DeviceApps.getInstalledApplications(
         includeAppIcons: true, includeSystemApps: false);
 
-    return List.from(allInstalledApps.where((app) =>
-        UPIApplications._validUPIPackageNames.contains(app.packageName)));
+    var iterable = allInstalledApps.where((app) =>
+        UPIApplications._validUPIPackageNames.contains(app.packageName));
+
+    iterable = iterable.map((app) {
+      if (app is ApplicationWithIcon) {
+        return app;
+      }
+      return null;
+    }).where((app) => app != null);
+
+    return List.from(iterable);
   }
 
   static Future<bool> checkIfUPIApplicationIsInstalled(
