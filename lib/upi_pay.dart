@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:decimal/decimal.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/services.dart';
 import 'package:upi_pay/upi_applications.dart';
@@ -13,13 +14,23 @@ class InvalidUPIAddressException implements Exception {
   String toString() => this.message;
 }
 
+class InvalidAmountException implements Exception {
+  String message;
+
+  InvalidAmountException(this.message);
+
+  @override
+  String toString() => this.message;
+}
+
 class UpiPay {
   static const MethodChannel _channel = const MethodChannel('upi_pay');
 
-  // needs to be updated in case any new handle names are added
-  // which doesn't happen frequently
-  // Reference - https://www.npci.org.in/upi-PSP%263rdpartyApps
-  static const List<String> _validUPIHandles = [
+  /// needs to be updated in case any new handle names are added
+  /// which doesn't happen frequently
+  ///
+  /// Reference - https://www.npci.org.in/upi-PSP%263rdpartyApps
+  static const List<String> validUPIHandles = [
     "@axisgo",
     "@pingpay",
     "@axisbank",
@@ -40,43 +51,75 @@ class UpiPay {
     "@myicici"
   ];
 
-// UPI currently only support INR
-  static final String _currency = 'INR';
+  // UPI current transaction upper limit
+  static const int _maxAmount = 100000;
+
+  // UPI currently only support INR
+  static const String _currency = 'INR';
 
   static bool _checkIfUPIAddressIsValid(String upiAddress) {
-    return UpiPay._validUPIHandles
+    return UpiPay.validUPIHandles
         .any((handler) => upiAddress.endsWith(handler));
   }
 
   /// Start a UPI Transaction
   ///
   /// Required parameters are as follows -
-  /// For the [app] argument a value from the [UPIApplication] enum must be provided
+  /// For the [app] (app in UPI Specification) argument a value from the [UPIApplication] enum must be provided
   ///
-  /// For the [receiverUPIAddress] (a.k.a [pa]) argument the UPI address of the receiver must be provided
+  /// For the [receiverUPIAddress] (pa in UPI Specification) argument the UPI address of the receiver must be provided
   /// it must end with a valid handle name otherwise it will throw [InvalidUPIAddressException]
   ///
-  /// For the [receiverName] (a.k.a [pn]) argument the name of the receiver must be provided
+  /// For the [receiverName] (pn in UPI Specification) argument the name of the receiver must be provided
   ///
-  /// For the [transactionRef] (a.k.a [tr]) argument a string value must be provided
+  /// For the [transactionRef] (tr in UPI Specification) argument a string value must be provided
   /// which must be unique for each request from your business must
   ///
-  /// For the []
+  /// For the [amount] (am in UPI Specification) argument expects a string value of between 0 to 1,00,000
+  /// The amount must not have more than 2 decimal digit precision
+  /// Also, beware that some UPI Apps have lower per transaction upper limit
+  ///
+  /// Optional Arguments includes
+  /// [merchantCode] (mc in UPI Specification) - can be used to denote business category code
+  /// [transactionNote] (tn in UPI  Specification) - can be used to provide a short description of the transaction
+  ///
+  /// UPI Linking Specification - https://www.npci.org.in/sites/all/themes/npcl/images/PDF/UPI_Linking_Specs_ver_1.5.1.pdf
   static Future<String> initiateTransaction(
       {@required UPIApplication app,
       @required String receiverUPIAddress,
       @required String receiverName,
+      @required String transactionRef,
+      @required String amount,
+      String transactionNote,
       String merchantCode}) async {
+    // check receiver address validity
     if (UpiPay._checkIfUPIAddressIsValid(receiverUPIAddress)) {
       throw InvalidUPIAddressException();
+    }
+
+    // check amount validity
+    final Decimal am = Decimal.parse(amount);
+    if (am.precision > 2) {
+      throw InvalidAmountException(
+          'Amount must not have more than 2 decimal precision');
+    }
+    if (am <= Decimal.zero) {
+      throw InvalidAmountException('Amount must be greater than 1');
+    }
+    if (am > Decimal.fromInt(UpiPay._maxAmount)) {
+      throw InvalidAmountException(
+          'Amount must be less then 1,00,000 since that is the upper limit per UPI transaction');
     }
 
     final responseString = await _channel.invokeMethod('initiateTransaction', {
       'app': getUPIApplicationPackageName(app),
       'pa': receiverUPIAddress,
       'pn': receiverName,
+      'tr': transactionRef,
+      'cu': UpiPay._currency,
+      'am': amount.toString(),
       'mc': merchantCode,
-      'cu': UpiPay._currency
+      'tn': transactionNote,
     });
 
     return responseString;

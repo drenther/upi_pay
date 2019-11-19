@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   device_apps: "1.0.8"
+  decimal: "0.3.5"
 
 dev_dependencies:
   flutter_test:
