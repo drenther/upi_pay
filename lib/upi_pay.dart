@@ -79,7 +79,7 @@ class UpiPay {
   /// The amount must not have more than 2 decimal digit precision
   /// Also, beware that some UPI Apps have lower per transaction upper limit
   ///
-  /// Optional Arguments includes
+  /// Optional Arguments include
   /// [merchantCode] (mc in UPI Specification) - can be used to denote business category code
   /// [transactionNote] (tn in UPI  Specification) - can be used to provide a short description of the transaction
   ///
