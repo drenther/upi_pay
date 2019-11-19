@@ -112,7 +112,7 @@ class UpiPay {
     }
 
     final responseString = await _channel.invokeMethod('initiateTransaction', {
-      'app': getUPIApplicationPackageName(app),
+      'app': app.toString(),
       'pa': receiverUPIAddress,
       'pn': receiverName,
       'tr': transactionRef,
