@@ -6,24 +6,29 @@ import 'package:flutter/services.dart';
 import 'package:upi_pay/upi_applications.dart';
 
 export 'package:upi_pay/upi_applications.dart';
-export 'package:device_apps/device_apps.dart' show Application;
+export 'package:device_apps/device_apps.dart' show ApplicationWithIcon;
 
-class InvalidUPIAddressException implements Exception {
-  String message = 'Invalid UPI Address';
+class _UpiException implements Exception {
+  String message;
 
-  InvalidUPIAddressException([this.message]);
+  _UpiException(this.message);
 
   @override
   String toString() => this.message;
 }
 
-class InvalidAmountException implements Exception {
-  String message;
+class InvalidUPIAddressException extends _UpiException {
+  InvalidUPIAddressException([String msg])
+      : super(msg ?? 'Invalid UPI Address');
+}
 
-  InvalidAmountException(this.message);
+class InvalidAmountException extends _UpiException {
+  InvalidAmountException(String msg) : super(msg);
+}
 
-  @override
-  String toString() => this.message;
+class UPIAppIsNotInstalledException extends _UpiException {
+  UPIAppIsNotInstalledException([String msg])
+      : super(msg ?? 'UPI App is not installed');
 }
 
 enum UpiTransactionStatus { Submitted, Success, Failure }
@@ -146,6 +151,11 @@ class UpiPay {
     // check receiver address validity
     if (UpiPay._checkIfUPIAddressIsValid(receiverUPIAddress)) {
       throw InvalidUPIAddressException();
+    }
+
+    // check if app is installed
+    if (await UPIApplications.checkIfUPIApplicationIsInstalled(app)) {
+      throw UPIAppIsNotInstalledException();
     }
 
     // check amount validity

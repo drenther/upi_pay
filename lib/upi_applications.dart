@@ -66,7 +66,8 @@ class UPIApplications {
     UPIApplication.myAirtelUPI
   ].map((app) => app.toString()).toList();
 
-  static Future<List<Application>> getAllInstalledUPIApplications() async {
+  static Future<List<ApplicationWithIcon>>
+      getAllInstalledUPIApplications() async {
     final allInstalledApps = await DeviceApps.getInstalledApplications(
         includeAppIcons: true, includeSystemApps: false);
 
