@@ -159,9 +159,9 @@ class UpiPay {
 
     // check amount validity
     final Decimal am = Decimal.parse(amount);
-    if (am.precision > 2) {
+    if (am.scale > 2) {
       throw InvalidAmountException(
-          'Amount must not have more than 2 decimal precision');
+          'Amount must not have more than 2 digits after decimal point');
     }
     if (am <= Decimal.zero) {
       throw InvalidAmountException('Amount must be greater than 1');
