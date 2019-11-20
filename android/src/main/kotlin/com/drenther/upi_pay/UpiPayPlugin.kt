@@ -20,6 +20,8 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
     var hasResponded = false;
 
     override fun onMethodCall(call: MethodCall, result: Result) {
+        hasResponded = false;
+
         this.result = result
         if (call.method == "initiateTransaction") {
             val app: String? = call.argument("app")
