@@ -3,26 +3,27 @@ package com.drenther.upi_pay
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.util.Log
-import java.util.Random
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry
 
-class UpiPayPlugin internal constructor(registrar:Registrar, channel:MethodChannel):MethodCallHandler, PluginRegistry.ActivityResultListener {
-  private val activity:Activity
-  private val context:Context
-  internal var _result:MethodChannel.Result
+class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodChannel): MethodCallHandler, PluginRegistry.ActivityResultListener {
+  private val activity: Activity
+  private val context: Context
+  
+  internal var _result: Result
   internal var requestCodeNumber = 201119
+  
   init{
     activity = registrar.activity()
     context = registrar.activeContext()
   }
-  fun onMethodCall(call:MethodCall, result:Result) {
+
+  fun onMethodCall(call: MethodCall, result: Result) {
     _result = result
     if (call.method.equals("initiateTransaction"))
     {
@@ -63,7 +64,8 @@ class UpiPayPlugin internal constructor(registrar:Registrar, channel:MethodChann
       result.notImplemented()
     }
   }
-  fun onActivityResult(requestCode:Int, resultCode:Int, data:Intent):Boolean {
+
+  fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent): Boolean {
     if (requestCodeNumber == requestCode && _result != null)
     {
       if (data != null)
@@ -85,21 +87,11 @@ class UpiPayPlugin internal constructor(registrar:Registrar, channel:MethodChann
     }
     return true
   }
-  private fun appInstalledOrNot(uri:String):Boolean {
-    val pm = activity.getPackageManager()
-    try
-    {
-      pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES)
-      return true
-    }
-    catch (e:PackageManager.NameNotFoundException) {}
-    return false
-  }
+
   companion object {
-    /** Plugin registration. */
     fun registerWith(registrar:Registrar) {
       val channel = MethodChannel(registrar.messenger(), "upi_pay")
-      val _plugin = FlutterUpiPlugin(registrar, channel)
+      val _plugin = UpiPayPlugin(registrar, channel)
       registrar.addActivityResultListener(_plugin)
       channel.setMethodCallHandler(_plugin)
     }
