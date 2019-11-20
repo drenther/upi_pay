@@ -148,12 +148,12 @@ class UpiPay {
       String transactionNote,
       String merchantCode}) async {
     // check receiver address validity
-    if (UpiPay.checkIfUpiAddressIsValid(receiverUpiAddress)) {
+    if (!UpiPay.checkIfUpiAddressIsValid(receiverUpiAddress)) {
       throw InvalidUpiAddressException();
     }
 
     // check if app is installed
-    if (await UpiApplications.checkIfUpiApplicationIsInstalled(app)) {
+    if (!(await UpiApplications.checkIfUpiApplicationIsInstalled(app))) {
       throw UpiAppIsNotInstalledException();
     }
 
