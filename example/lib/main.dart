@@ -44,6 +44,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        appBar: AppBar(
+          title: Text('UPI Pay'),
+        ),
         body: Container(
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: ListView(
@@ -80,7 +83,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 196),
+                margin: EdgeInsets.only(top: 32),
                 child: Row(
                   children: <Widget>[
                     Expanded(
@@ -105,41 +108,57 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 128),
-                child: FutureBuilder<List<ApplicationWithIcon>>(
-                  future: _appsFuture,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState != ConnectionState.done) {
-                      return Container();
-                    }
+                margin: EdgeInsets.only(top: 256),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(bottom: 12),
+                      child: Text(
+                        'Pay Using',
+                        style: Theme.of(context).textTheme.caption,
+                      ),
+                    ),
+                    FutureBuilder<List<ApplicationWithIcon>>(
+                      future: _appsFuture,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState != ConnectionState.done) {
+                          return Container();
+                        }
 
-                    return GridView.count(
-                      crossAxisCount: 2,
-                      shrinkWrap: true,
-                      mainAxisSpacing: 8,
-                      crossAxisSpacing: 8,
-                      childAspectRatio: 1.6,
-                      children: snapshot.data
-                          .map((it) => Container(
-                                color: Colors.grey[200],
-                                alignment: Alignment.center,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Image.memory(
-                                      it.icon,
-                                      width: 64,
+                        return GridView.count(
+                          crossAxisCount: 2,
+                          shrinkWrap: true,
+                          mainAxisSpacing: 8,
+                          crossAxisSpacing: 8,
+                          childAspectRatio: 1.6,
+                          children: snapshot.data
+                              .map((it) => Material(
+                                    color: Colors.grey[200],
+                                    child: InkWell(
+                                      onTap: () {},
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Image.memory(
+                                            it.icon,
+                                            width: 64,
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.only(top: 4),
+                                            child: Text(it.appName),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                    Container(
-                                      margin: EdgeInsets.only(top: 4),
-                                      child: Text(it.appName),
-                                    ),
-                                  ],
-                                ),
-                              ))
-                          .toList(),
-                    );
-                  },
+                                  ))
+                              .toList(),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               )
             ],
