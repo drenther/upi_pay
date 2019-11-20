@@ -79,7 +79,6 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
                     this.success("invalid_response")
                 }
             } else {
-                Log.d("upi_pay", "No data response. User cancelled.")
                 this.success("user_cancelled")
             }
         }
