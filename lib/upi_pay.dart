@@ -76,6 +76,10 @@ class UpiTransactionResponse {
       }
     });
   }
+
+  String toString() {
+    return 'UpiTransactionResponse { txnId: $txnId, responseCode: $responseCode, approvalRefNo: $approvalRefNo, status: $status, txnRef: $txnRef, rawResponse: $rawResponse }';
+  }
 }
 
 class UpiPay {
