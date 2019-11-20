@@ -112,7 +112,7 @@ class UpiPay {
   // UPI currently only support INR
   static const String _currency = 'INR';
 
-  static bool _checkIfUpiAddressIsValid(String upiAddress) {
+  static bool checkIfUpiAddressIsValid(String upiAddress) {
     return UpiPay.validUpiHandles
         .any((handler) => upiAddress.endsWith(handler));
   }
@@ -148,7 +148,7 @@ class UpiPay {
       String transactionNote,
       String merchantCode}) async {
     // check receiver address validity
-    if (UpiPay._checkIfUpiAddressIsValid(receiverUpiAddress)) {
+    if (UpiPay.checkIfUpiAddressIsValid(receiverUpiAddress)) {
       throw InvalidUpiAddressException();
     }
 
