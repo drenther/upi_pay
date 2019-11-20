@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:upi_pay/upi_applications.dart';
 
 export 'package:upi_pay/upi_applications.dart';
-export 'package:device_apps/device_apps.dart' show ApplicationWithIcon;
 
 class _UpiException implements Exception {
   String message;
@@ -31,7 +30,7 @@ class UpiAppIsNotInstalledException extends _UpiException {
       : super(msg ?? 'UPI App is not installed');
 }
 
-enum UpiTransactionStatus { Submitted, Success, Failure }
+enum UpiTransactionStatus { submitted, success, failure }
 
 class UpiTransactionResponse {
   String txnId;
@@ -63,11 +62,11 @@ class UpiTransactionResponse {
           break;
         case 'status':
           if (value.toLowerCase().contains('success')) {
-            this.status = UpiTransactionStatus.Success;
+            this.status = UpiTransactionStatus.success;
           } else if (value.toLowerCase().contains('fail')) {
-            this.status = UpiTransactionStatus.Failure;
+            this.status = UpiTransactionStatus.failure;
           } else if (value.toLowerCase().contains('submitted')) {
-            this.status = UpiTransactionStatus.Submitted;
+            this.status = UpiTransactionStatus.submitted;
           } else {
             throw UnsupportedError('Unsupported UPI Transaction Status');
           }
