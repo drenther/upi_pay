@@ -97,24 +97,28 @@ class UpiPay {
   ///
   /// Reference - https://www.npci.org.in/upi-PSP%263rdpartyApps
   static const List<String> validUpiHandles = [
-    "@axisgo",
-    "@pingpay",
-    "@axisbank",
+    "@abfspay",
     "@apl",
     "@axisb",
-    "@abfspay",
+    "@axisbank",
+    "@axisgo",
+    "@barodapay",
     "@fbl",
     "@hdfcbankjd",
-    "@ikwik",
-    "@idfcbank",
-    "@kmbl",
-    "@indus",
-    "@yesbank",
-    "@ybl",
-    "@okaxis",
     "@icici",
     "@icicibank",
-    "@myicici"
+    "@idfcbank",
+    "@ikwik",
+    "@indus",
+    "@kmbl",
+    "@myicici",
+    "@okaxis",
+    "@okhdfcbank",
+    "@okicici",
+    "@oksbi",
+    "@pingpay",
+    "@ybl",
+    "@yesbank",
   ];
 
   // UPI current transaction upper limit
