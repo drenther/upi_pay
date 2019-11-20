@@ -44,10 +44,6 @@ class UpiTransactionResponse {
     this.rawResponse = responseString;
 
     // Consider the response to be failure if success or submitted is not explicitly returned.
-    //
-    // There are instances where a non-standard response might be returned.
-    // For ex: MyAirtel returns `user_cancelled` response if a user manually cancels the transaction.
-    // This is converted to failure nonetheless.
     this.status = UpiTransactionStatus.failure;
 
     List<String> fragments = responseString.split('&');
@@ -154,14 +150,21 @@ class UpiPay {
   /// [transactionNote] (tn in UPI  Specification) - can be used to provide a short description of the transaction
   ///
   /// UPI Linking Specification - https://www.npci.org.in/sites/all/themes/npcl/images/PDF/UPI_Linking_Specs_ver_1.5.1.pdf
-  static Future<UpiTransactionResponse> initiateTransaction(
-      {@required UpiApplication app,
-      @required String receiverUpiAddress,
-      @required String receiverName,
-      @required String transactionRef,
-      @required String amount,
-      String transactionNote,
-      String merchantCode}) async {
+  static Future<UpiTransactionResponse> initiateTransaction({
+    @required UpiApplication app,
+    @required String receiverUpiAddress,
+    @required String receiverName,
+    @required String transactionRef,
+    @required String amount,
+    String transactionNote,
+    String merchantCode,
+  }) async {
+    assert(app != null);
+    assert(receiverUpiAddress != null);
+    assert(receiverName != null);
+    assert(transactionRef != null);
+    assert(amount != null);
+
     // check receiver address validity
     if (!UpiPay.checkIfUpiAddressIsValid(receiverUpiAddress)) {
       throw InvalidUpiAddressException();
@@ -192,7 +195,7 @@ class UpiPay {
       'pn': receiverName,
       'tr': transactionRef,
       'cu': UpiPay._currency,
-      'am': amount.toString(),
+      'am': am.toString(),
       'mc': merchantCode,
       'tn': transactionNote,
     });
