@@ -1,6 +1,6 @@
 import 'package:device_apps/device_apps.dart';
 
-enum _UPIApplication {
+enum _UpiApplication {
   googlePay,
   phonePe,
   payTM,
@@ -8,44 +8,44 @@ enum _UPIApplication {
   bhim,
   miPay,
   amazonPay,
-  trueCallerUPI,
-  myAirtelUPI
+  trueCallerUpi,
+  myAirtelUpi
 }
 
-class UPIApplication {
-  final _UPIApplication _inner;
+class UpiApplication {
+  final _UpiApplication _inner;
 
-  UPIApplication._(this._inner);
+  UpiApplication._(this._inner);
 
-  static final googlePay = UPIApplication._(_UPIApplication.googlePay);
-  static final phonePe = UPIApplication._(_UPIApplication.phonePe);
-  static final payTM = UPIApplication._(_UPIApplication.payTM);
-  static final sbiPay = UPIApplication._(_UPIApplication.sbiPay);
-  static final bhim = UPIApplication._(_UPIApplication.bhim);
-  static final miPay = UPIApplication._(_UPIApplication.miPay);
-  static final amazonPay = UPIApplication._(_UPIApplication.amazonPay);
-  static final trueCallerUPI = UPIApplication._(_UPIApplication.trueCallerUPI);
-  static final myAirtelUPI = UPIApplication._(_UPIApplication.myAirtelUPI);
+  static final googlePay = UpiApplication._(_UpiApplication.googlePay);
+  static final phonePe = UpiApplication._(_UpiApplication.phonePe);
+  static final payTM = UpiApplication._(_UpiApplication.payTM);
+  static final sbiPay = UpiApplication._(_UpiApplication.sbiPay);
+  static final bhim = UpiApplication._(_UpiApplication.bhim);
+  static final miPay = UpiApplication._(_UpiApplication.miPay);
+  static final amazonPay = UpiApplication._(_UpiApplication.amazonPay);
+  static final trueCallerUpi = UpiApplication._(_UpiApplication.trueCallerUpi);
+  static final myAirtelUpi = UpiApplication._(_UpiApplication.myAirtelUpi);
 
   String toString() {
     switch (_inner) {
-      case _UPIApplication.googlePay:
+      case _UpiApplication.googlePay:
         return "com.google.android.apps.nbu.paisa.user";
-      case _UPIApplication.phonePe:
+      case _UpiApplication.phonePe:
         return 'com.phonepe.app';
-      case _UPIApplication.payTM:
+      case _UpiApplication.payTM:
         return 'net.one97.paytm';
-      case _UPIApplication.sbiPay:
+      case _UpiApplication.sbiPay:
         return 'com.sbi.upi';
-      case _UPIApplication.bhim:
+      case _UpiApplication.bhim:
         return 'in.org.npci.upiapp';
-      case _UPIApplication.miPay:
+      case _UpiApplication.miPay:
         return 'com.mipay.wallet.in';
-      case _UPIApplication.amazonPay:
+      case _UpiApplication.amazonPay:
         return 'in.amazon.mShop.android.shopping';
-      case _UPIApplication.trueCallerUPI:
+      case _UpiApplication.trueCallerUpi:
         return 'com.truecaller';
-      case _UPIApplication.myAirtelUPI:
+      case _UpiApplication.myAirtelUpi:
         return 'com.myairtelapp';
       default:
         throw UnsupportedError('Invalid / Unsupported UPI Application');
@@ -53,26 +53,26 @@ class UPIApplication {
   }
 }
 
-class UPIApplications {
-  static final List<String> _validUPIPackageNames = [
-    UPIApplication.googlePay,
-    UPIApplication.phonePe,
-    UPIApplication.payTM,
-    UPIApplication.sbiPay,
-    UPIApplication.bhim,
-    UPIApplication.miPay,
-    UPIApplication.amazonPay,
-    UPIApplication.trueCallerUPI,
-    UPIApplication.myAirtelUPI
+class UpiApplications {
+  static final List<String> _validUpiPackageNames = [
+    UpiApplication.googlePay,
+    UpiApplication.phonePe,
+    UpiApplication.payTM,
+    UpiApplication.sbiPay,
+    UpiApplication.bhim,
+    UpiApplication.miPay,
+    UpiApplication.amazonPay,
+    UpiApplication.trueCallerUpi,
+    UpiApplication.myAirtelUpi
   ].map((app) => app.toString()).toList();
 
   static Future<List<ApplicationWithIcon>>
-      getAllInstalledUPIApplications() async {
+      getAllInstalledUpiApplications() async {
     var allInstalledApps = await DeviceApps.getInstalledApplications(
         includeAppIcons: true, includeSystemApps: false);
 
     var iterable = allInstalledApps.where((app) =>
-        UPIApplications._validUPIPackageNames.contains(app.packageName));
+        UpiApplications._validUpiPackageNames.contains(app.packageName));
 
     iterable = iterable.map((app) {
       if (app is ApplicationWithIcon) {
@@ -84,8 +84,8 @@ class UPIApplications {
     return List.from(iterable);
   }
 
-  static Future<bool> checkIfUPIApplicationIsInstalled(
-      UPIApplication app) async {
+  static Future<bool> checkIfUpiApplicationIsInstalled(
+      UpiApplication app) async {
     return await DeviceApps.isAppInstalled(app.toString());
   }
 }

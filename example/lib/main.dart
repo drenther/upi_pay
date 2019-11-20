@@ -23,7 +23,7 @@ class _MyAppState extends State<MyApp> {
 
     _amountController.text =
         (Random.secure().nextDouble() * 10).toStringAsFixed(2);
-    _appsFuture = UPIApplications.getAllInstalledUPIApplications();
+    _appsFuture = UpiApplications.getAllInstalledUpiApplications();
   }
 
   @override

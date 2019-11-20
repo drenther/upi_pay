@@ -17,8 +17,8 @@ class _UpiException implements Exception {
   String toString() => this.message;
 }
 
-class InvalidUPIAddressException extends _UpiException {
-  InvalidUPIAddressException([String msg])
+class InvalidUpiAddressException extends _UpiException {
+  InvalidUpiAddressException([String msg])
       : super(msg ?? 'Invalid UPI Address');
 }
 
@@ -26,8 +26,8 @@ class InvalidAmountException extends _UpiException {
   InvalidAmountException(String msg) : super(msg);
 }
 
-class UPIAppIsNotInstalledException extends _UpiException {
-  UPIAppIsNotInstalledException([String msg])
+class UpiAppIsNotInstalledException extends _UpiException {
+  UpiAppIsNotInstalledException([String msg])
       : super(msg ?? 'UPI App is not installed');
 }
 
@@ -86,7 +86,7 @@ class UpiPay {
   /// which doesn't happen frequently
   ///
   /// Reference - https://www.npci.org.in/upi-PSP%263rdpartyApps
-  static const List<String> validUPIHandles = [
+  static const List<String> validUpiHandles = [
     "@axisgo",
     "@pingpay",
     "@axisbank",
@@ -113,18 +113,18 @@ class UpiPay {
   // UPI currently only support INR
   static const String _currency = 'INR';
 
-  static bool _checkIfUPIAddressIsValid(String upiAddress) {
-    return UpiPay.validUPIHandles
+  static bool _checkIfUpiAddressIsValid(String upiAddress) {
+    return UpiPay.validUpiHandles
         .any((handler) => upiAddress.endsWith(handler));
   }
 
   /// Start a UPI Transaction
   ///
   /// Required parameters are as follows -
-  /// For the [app] (app in UPI Specification) argument a value from the [UPIApplication] enum must be provided
+  /// For the [app] (app in UPI Specification) argument a value from the [UpiApplication] enum must be provided
   ///
-  /// For the [receiverUPIAddress] (pa in UPI Specification) argument the UPI address of the receiver must be provided
-  /// it must end with a valid handle name otherwise it will throw [InvalidUPIAddressException]
+  /// For the [receiverUpiAddress] (pa in UPI Specification) argument the UPI address of the receiver must be provided
+  /// it must end with a valid handle name otherwise it will throw [InvalidUpiAddressException]
   ///
   /// For the [receiverName] (pn in UPI Specification) argument the name of the receiver must be provided
   ///
@@ -141,21 +141,21 @@ class UpiPay {
   ///
   /// UPI Linking Specification - https://www.npci.org.in/sites/all/themes/npcl/images/PDF/UPI_Linking_Specs_ver_1.5.1.pdf
   static Future<UpiTransactionResponse> initiateTransaction(
-      {@required UPIApplication app,
-      @required String receiverUPIAddress,
+      {@required UpiApplication app,
+      @required String receiverUpiAddress,
       @required String receiverName,
       @required String transactionRef,
       @required String amount,
       String transactionNote,
       String merchantCode}) async {
     // check receiver address validity
-    if (UpiPay._checkIfUPIAddressIsValid(receiverUPIAddress)) {
-      throw InvalidUPIAddressException();
+    if (UpiPay._checkIfUpiAddressIsValid(receiverUpiAddress)) {
+      throw InvalidUpiAddressException();
     }
 
     // check if app is installed
-    if (await UPIApplications.checkIfUPIApplicationIsInstalled(app)) {
-      throw UPIAppIsNotInstalledException();
+    if (await UpiApplications.checkIfUpiApplicationIsInstalled(app)) {
+      throw UpiAppIsNotInstalledException();
     }
 
     // check amount validity
@@ -174,7 +174,7 @@ class UpiPay {
 
     String responseString = await _channel.invokeMethod('initiateTransaction', {
       'app': app.toString(),
-      'pa': receiverUPIAddress,
+      'pa': receiverUpiAddress,
       'pn': receiverName,
       'tr': transactionRef,
       'cu': UpiPay._currency,
