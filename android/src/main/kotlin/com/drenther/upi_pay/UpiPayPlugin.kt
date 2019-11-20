@@ -17,6 +17,7 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
     private var result: Result? = null
     private var requestCodeNumber = 201119
 
+    var hasResponded = false;
 
     override fun onMethodCall(call: MethodCall, result: Result) {
         this.result = result
@@ -53,10 +54,18 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
                 activity.startActivityForResult(intent, requestCodeNumber)
                 this.result = result
             } catch (ex: Exception) {
-                result.success("failed_to_open_app")
+                Log.d("upi_pay", ex.toString())
+                this.success("failed_to_open_app")
             }
         } else {
             result.notImplemented()
+        }
+    }
+
+    private fun success(o: String) {
+        if (!hasResponded) {
+            hasResponded = true
+            result?.success(o);
         }
     }
 
@@ -65,13 +74,13 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
             if (data != null) {
                 try {
                     val response = data.getStringExtra("response")
-                    result?.success(response)
+                    this.success(response)
                 } catch (ex: Exception) {
-                    result?.success("invalid_response")
+                    this.success("invalid_response")
                 }
             } else {
-                Log.d("Result", "Data = null (User canceled)")
-                result?.success("user_canceled")
+                Log.d("upi_pay", "No data response. User cancelled.")
+                this.success("user_cancelled")
             }
         }
         return true
