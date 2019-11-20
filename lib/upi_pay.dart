@@ -43,6 +43,13 @@ class UpiTransactionResponse {
   UpiTransactionResponse(String responseString) {
     this.rawResponse = responseString;
 
+    // Consider the response to be failure if success or submitted is not explicitly returned.
+    //
+    // There are instances where a non-standard response might be returned.
+    // For ex: MyAirtel returns `user_cancelled` response if a user manually cancels the transaction.
+    // This is converted to failure nonetheless.
+    this.status = UpiTransactionStatus.failure;
+
     List<String> fragments = responseString.split('&');
 
     fragments.forEach((fragment) {
