@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:device_apps/device_apps.dart';
+import 'package:tuple/tuple.dart';
 
 enum _UpiApplication {
   googlePay,
@@ -54,7 +57,7 @@ class UpiApplication {
 }
 
 class UpiApplications {
-  static final List<String> _validUpiPackageNames = [
+  static final List<UpiApplication> _validUpiPackageNames = [
     UpiApplication.googlePay,
     UpiApplication.phonePe,
     UpiApplication.payTM,
@@ -64,28 +67,48 @@ class UpiApplications {
     UpiApplication.amazonPay,
     UpiApplication.trueCallerUpi,
     UpiApplication.myAirtelUpi
-  ].map((app) => app.toString()).toList();
+  ];
 
-  static Future<List<ApplicationWithIcon>>
-      getAllInstalledUpiApplications() async {
+  static Future<List<ApplicationMeta>> getAllInstalledUpiApplications() async {
     var allInstalledApps = await DeviceApps.getInstalledApplications(
         includeAppIcons: true, includeSystemApps: false);
 
-    var iterable = allInstalledApps.where((app) =>
-        UpiApplications._validUpiPackageNames.contains(app.packageName));
+    var iterable = allInstalledApps.map((app) {
+      final upiApp = UpiApplications._validUpiPackageNames.firstWhere(
+        (it) => app.packageName == it.toString(),
+        orElse: () => null,
+      );
 
-    iterable = iterable.map((app) {
-      if (app is ApplicationWithIcon) {
-        return app;
-      }
-      return null;
-    }).where((app) => app != null);
+      return Tuple2(app, upiApp);
+    });
 
-    return List.from(iterable);
+    // Only get found upi applications.
+    iterable = iterable.where((tup) => tup.item2 != null);
+
+    // Convert to ApplicationMeta.
+    return List.from(
+      iterable.map((app) => ApplicationMeta._(app.item2, app.item1)),
+    );
   }
 
   static Future<bool> checkIfUpiApplicationIsInstalled(
       UpiApplication app) async {
     return await DeviceApps.isAppInstalled(app.toString());
   }
+}
+
+class ApplicationMeta {
+  ApplicationMeta._(this._upiApplication, this._app);
+
+  UpiApplication _upiApplication;
+  UpiApplication get upiApplication => _upiApplication;
+
+  ApplicationWithIcon _app;
+
+  String get appName => _app.appName;
+  String get packageName => _app.packageName;
+  int get versionCode => _app.versionCode;
+  String get dataDir => _app.dataDir;
+  bool get systemApp => _app.systemApp;
+  Uint8List get icon => _app.icon;
 }

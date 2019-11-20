@@ -12,6 +12,7 @@ dependencies:
     sdk: flutter
   device_apps: "1.0.8"
   decimal: "0.3.5"
+  tuple: ^1.0.3
 
 dev_dependencies:
   flutter_test:
