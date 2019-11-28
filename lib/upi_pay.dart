@@ -88,35 +88,6 @@ class UpiTransactionResponse {
 class UpiPay {
   static const MethodChannel _channel = const MethodChannel('upi_pay');
 
-  /// needs to be updated in case any new handle names are added
-  /// which doesn't happen frequently
-  ///
-  /// Reference - https://www.npci.org.in/upi-PSP%263rdpartyApps
-  static const List<String> validUpiHandles = [
-    "@abfspay",
-    "@apl",
-    "@axisb",
-    "@axisbank",
-    "@axisgo",
-    "@barodapay",
-    "@fbl",
-    "@hdfcbankjd",
-    "@icici",
-    "@icicibank",
-    "@idfcbank",
-    "@ikwik",
-    "@indus",
-    "@kmbl",
-    "@myicici",
-    "@okaxis",
-    "@okhdfcbank",
-    "@okicici",
-    "@oksbi",
-    "@pingpay",
-    "@ybl",
-    "@yesbank",
-  ];
-
   // UPI current transaction upper limit
   static const int _maxAmount = 100000;
 
@@ -124,8 +95,7 @@ class UpiPay {
   static const String _currency = 'INR';
 
   static bool checkIfUpiAddressIsValid(String upiAddress) {
-    return UpiPay.validUpiHandles
-        .any((handler) => upiAddress.endsWith(handler));
+    return upiAddress.split('@').length == 2;
   }
 
   /// Start a UPI Transaction
