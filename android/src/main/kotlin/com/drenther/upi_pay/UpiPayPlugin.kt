@@ -41,6 +41,7 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
                 uriBuilder.appendQueryParameter("tr", tr)
                 uriBuilder.appendQueryParameter("am", am)
                 uriBuilder.appendQueryParameter("cu", cu)
+                uriBuilder.appendQueryParameter("mode", "intent")
                 if (mc != null) {
                     uriBuilder.appendQueryParameter("mc", mc)
                 }
