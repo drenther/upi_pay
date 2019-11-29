@@ -2,8 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
+// for meta
+import 'package:flutter/material.dart';
 import 'package:decimal/decimal.dart';
-import 'package:meta/meta.dart';
 import 'package:flutter/services.dart';
 import 'package:upi_pay/upi_applications.dart';
 

@@ -1,8 +1,10 @@
 name: upi_pay
 description: A new flutter plugin project.
 version: 0.1.0
-author:
-homepage:
+authors:
+  - Soumyajit Pathak <s.pathak5995@gmail.com>
+  - Sharad Chand <sharad@sharadchand.com>
+homepage: https://github.com/drenther/upi_pay
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
