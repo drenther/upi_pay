@@ -86,6 +86,8 @@ You can access the following properties on the response instance -
   Always prefer the use of `UpiTransactionStatus` enum to decipher the status of the transaction response for better code health
 - `txnRef` - The transaction ref that was passed when initiating the payment. Use this value to identify which transaction the response belongs to
 
+You can also access the raw URL response by accessing `rawResponse` on the response object
+
 Take a look at the UPI Linking specification linked above to better understand the meaning of these fields
 
 #### Exceptions
