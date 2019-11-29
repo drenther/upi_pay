@@ -1,5 +1,7 @@
 # upi_pay
 
+<img src="https://user-images.githubusercontent.com/12991390/69864983-244be680-12c6-11ea-918a-9d06c5e87110.png" height="720" width="360">
+
 A flutter plugin to make payments by opening UPI applications using **Android Intent** and receiving the transaction information back in response.
 
 The plugin also provides additional APIs to query and list installed applications.
