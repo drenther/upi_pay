@@ -36,13 +36,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.5"
-  device_apps:
-    dependency: "direct main"
-    description:
-      name: device_apps
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.8"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -165,4 +158,3 @@ packages:
     version: "2.0.8"
 sdks:
   dart: ">=2.2.2 <3.0.0"
-  flutter: ">=0.1.2 <2.0.0"
