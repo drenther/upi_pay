@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:decimal/decimal.dart';
 import 'package:meta/meta.dart';
@@ -85,6 +87,18 @@ class UpiTransactionResponse {
   }
 }
 
+final List<UpiApplication> _validUpiPackageNames = [
+  UpiApplication.googlePay,
+  UpiApplication.phonePe,
+  UpiApplication.payTM,
+  UpiApplication.sbiPay,
+  UpiApplication.bhim,
+  UpiApplication.miPay,
+  UpiApplication.amazonPay,
+  UpiApplication.trueCallerUpi,
+  UpiApplication.myAirtelUpi
+];
+
 class UpiPay {
   static const MethodChannel _channel = const MethodChannel('upi_pay');
 
@@ -167,4 +181,77 @@ class UpiPay {
 
     return UpiTransactionResponse(responseString);
   }
+
+  static Future<List<ApplicationMeta>> getInstalledUpiApplications() async {
+    final appsList =
+        await _channel.invokeListMethod<Map>('getInstalledUpiApps');
+
+    final upiApps = appsList
+        .map((app) {
+          final packageName = _castToString(app['packageName']);
+          final upiApp = _validUpiPackageNames.firstWhere(
+            (it) => packageName == it.toString(),
+            orElse: () => null,
+          );
+
+          if (upiApp == null) {
+            return null;
+          }
+
+          final icon = _castToString(app['icon']);
+          final priority = _castToInt(app['priority']);
+          final preferredOrder = _castToInt(app['preferredOrder']);
+
+          return ApplicationMeta._(
+            upiApp,
+            packageName,
+            base64.decode(icon),
+            priority,
+            preferredOrder,
+          );
+        })
+        .where((it) => it != null)
+        .toList();
+
+    return upiApps;
+  }
+}
+
+String _castToString(dynamic val) {
+  if (val is String) {
+    return val;
+  }
+  throw TypeError();
+}
+
+int _castToInt(dynamic val) {
+  if (val is int) {
+    return val;
+  }
+  throw TypeError();
+}
+
+class ApplicationMeta {
+  ApplicationMeta._(
+    this._upiApplication,
+    this._packageName,
+    this._icon,
+    this._priority,
+    this._preferredOrder,
+  );
+
+  UpiApplication _upiApplication;
+  UpiApplication get upiApplication => _upiApplication;
+
+  String _packageName;
+  String get packageName => _packageName;
+
+  Uint8List _icon;
+  Uint8List get icon => _icon;
+
+  int _priority;
+  int get priority => _priority;
+
+  int _preferredOrder;
+  int get preferredOrder => _preferredOrder;
 }
