@@ -74,7 +74,7 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
 
             activity.startActivityForResult(intent, requestCodeNumber)
         } catch (ex: Exception) {
-            Log.d("upi_pay", ex.toString())
+            Log.e("upi_pay", ex.toString())
             this.success("failed_to_open_app")
         }
     }
@@ -94,27 +94,37 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
 
         val packageManager = activity.packageManager
 
-        val activities = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+        try {
+            val activities = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
 
-        val activityResponse = activities.map {
-            val drawable = packageManager.getApplicationIcon(it.resolvePackageName)
-            val bitmap = getBitmapFromDrawable(drawable)
-            val icon = if (bitmap != null) {
-                encodeToBase64(bitmap)
-            } else {
-                null
+            // Convert the activities into a response that can be transferred over the channel.
+            val activityResponse = activities.map {
+                val packageName = it.activityInfo.packageName
+                val drawable = packageManager.getApplicationIcon(packageName)
+
+                val bitmap = getBitmapFromDrawable(drawable)
+                val icon = if (bitmap != null) {
+                    encodeToBase64(bitmap)
+                } else {
+                    null
+                }
+
+                mapOf(
+                        "packageName" to packageName,
+                        "icon" to icon,
+                        "priority" to it.priority,
+                        "preferredOrder" to it.preferredOrder
+                )
+
             }
 
-            mapOf(
-                    "packageName" to it.resolvePackageName,
-                    "icon" to icon,
-                    "priority" to it.priority,
-                    "preferredOrder" to it.preferredOrder
-            )
 
+            result?.success(activityResponse)
+        } catch (ex: Exception) {
+            Log.e("upi_pay", ex.toString())
+            result?.error("getInstalledUpiApps", "exception", ex)
         }
 
-        result?.success(activityResponse)
     }
 
     private fun encodeToBase64(image: Bitmap): String? {
