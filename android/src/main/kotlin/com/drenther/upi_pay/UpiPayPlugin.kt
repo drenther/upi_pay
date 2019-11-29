@@ -2,7 +2,11 @@ package com.drenther.upi_pay
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.util.Base64
 import android.util.Log
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -10,6 +14,8 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.ActivityResultListener
 import io.flutter.plugin.common.PluginRegistry.Registrar
+import java.io.ByteArrayOutputStream
+
 
 class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodChannel) : MethodCallHandler, ActivityResultListener {
     private val activity = registrar.activity()
@@ -89,12 +95,19 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
         val packageManager = activity.packageManager
 
         val activities = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
-        val activityResponse = activities.map {
-            val icon = packageManager.getApplicationIcon(it.resolvePackageName)
 
-             mapOf(
+        val activityResponse = activities.map {
+            val drawable = packageManager.getApplicationIcon(it.resolvePackageName)
+            val bitmap = getBitmapFromDrawable(drawable)
+            val icon = if (bitmap != null) {
+                encodeToBase64(bitmap)
+            } else {
+                null
+            }
+
+            mapOf(
                     "packageName" to it.resolvePackageName,
-                    "icon" to it.icon,
+                    "icon" to icon,
                     "priority" to it.priority,
                     "preferredOrder" to it.preferredOrder
             )
@@ -102,6 +115,20 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
         }
 
         result?.success(activityResponse)
+    }
+
+    private fun encodeToBase64(image: Bitmap): String? {
+        val byteArrayOS = ByteArrayOutputStream()
+        image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOS)
+        return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.NO_WRAP)
+    }
+
+    private fun getBitmapFromDrawable(drawable: Drawable): Bitmap? {
+        val bmp: Bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bmp)
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight())
+        drawable.draw(canvas)
+        return bmp
     }
 
     private fun success(o: String) {
