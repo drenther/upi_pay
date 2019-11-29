@@ -130,16 +130,18 @@ class UpiPay {
   /// Also, beware that some UPI Apps have lower per transaction upper limit
   ///
   /// Optional Arguments include
+  /// [url] (url in UPI Specification) - can be used to pass a shareable link related to the transaction like an invoice copy, etc.
   /// [merchantCode] (mc in UPI Specification) - can be used to denote business category code
   /// [transactionNote] (tn in UPI  Specification) - can be used to provide a short description of the transaction
   ///
-  /// UPI Linking Specification - https://www.npci.org.in/sites/all/themes/npcl/images/PDF/UPI_Linking_Specs_ver_1.5.1.pdf
+  /// UPI Linking Specification - https://www.npci.org.in/sites/default/files/UPI%20Linking%20Specs_ver%201.6.pdf
   static Future<UpiTransactionResponse> initiateTransaction({
     @required UpiApplication app,
     @required String receiverUpiAddress,
     @required String receiverName,
     @required String transactionRef,
     @required String amount,
+    String url,
     String transactionNote,
     String merchantCode,
   }) async {
@@ -175,6 +177,7 @@ class UpiPay {
       'tr': transactionRef,
       'cu': UpiPay._currency,
       'am': am.toString(),
+      'url': url,
       'mc': merchantCode,
       'tn': transactionNote,
     });
