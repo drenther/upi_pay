@@ -39,7 +39,7 @@ class _ScreenState extends State<Screen> {
 
     _amountController.text =
         (Random.secure().nextDouble() * 10).toStringAsFixed(2);
-    _appsFuture = UpiApplications.getAllInstalledUpiApplications();
+    _appsFuture = UpiPay.getInstalledUpiApplications();
   }
 
   @override
@@ -68,12 +68,16 @@ class _ScreenState extends State<Screen> {
       _upiAddrError = null;
     });
 
+    final transactionRef = Random.secure().nextInt(1 << 32).toString();
+    print("Starting transaction with id $transactionRef");
+
     final a = await UpiPay.initiateTransaction(
       amount: _amountController.text,
       app: app.upiApplication,
       receiverName: 'Sharad',
       receiverUpiAddress: _upiAddressController.text,
-      transactionRef: Random.secure().nextInt(1 << 32).toString(),
+      transactionRef: transactionRef,
+      merchantCode: '7372',
     );
 
     print(a);
@@ -150,7 +154,7 @@ class _ScreenState extends State<Screen> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 256),
+            margin: EdgeInsets.only(top: 128, bottom: 32),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -174,6 +178,7 @@ class _ScreenState extends State<Screen> {
                       mainAxisSpacing: 8,
                       crossAxisSpacing: 8,
                       childAspectRatio: 1.6,
+                      physics: NeverScrollableScrollPhysics(),
                       children: snapshot.data
                           .map((it) => Material(
                                 key: ObjectKey(it.upiApplication),
@@ -191,7 +196,9 @@ class _ScreenState extends State<Screen> {
                                       ),
                                       Container(
                                         margin: EdgeInsets.only(top: 4),
-                                        child: Text(it.appName),
+                                        child: Text(
+                                          it.upiApplication.getAppName(),
+                                        ),
                                       ),
                                     ],
                                   ),
