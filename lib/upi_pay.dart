@@ -140,11 +140,6 @@ class UpiPay {
       throw InvalidUpiAddressException();
     }
 
-    // check if app is installed
-    if (!(await UpiApplications.checkIfUpiApplicationIsInstalled(app))) {
-      throw UpiAppIsNotInstalledException();
-    }
-
     // check amount validity
     final Decimal am = Decimal.parse(amount);
     if (am.scale > 2) {
