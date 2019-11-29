@@ -32,7 +32,7 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
 
         when (call.method) {
             "initiateTransaction" -> this.initiateTransaction(call)
-            "getInstalledUPIApps" -> this.getInstalledUPIApps()
+            "getInstalledUpiApps" -> this.getInstalledUpiApps()
             else -> result.notImplemented()
         }
     }
@@ -79,7 +79,7 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
         }
     }
 
-    private fun getInstalledUPIApps() {
+    private fun getInstalledUpiApps() {
         val uriBuilder = Uri.Builder()
         uriBuilder.scheme("upi").authority("pay")
         uriBuilder.appendQueryParameter("pa", "abc@ybl")
