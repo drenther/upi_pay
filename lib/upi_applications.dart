@@ -20,7 +20,7 @@ class UpiApplication {
   static final phonePe = UpiApplication._(_UpiApplication.phonePe);
   static final payTM = UpiApplication._(_UpiApplication.payTM);
   static final sbiPay = UpiApplication._(_UpiApplication.sbiPay);
-  static final iMobileICICI = UpiApplication._(UpiApplication.iMobileICICI);
+  static final iMobileICICI = UpiApplication._(_UpiApplication.iMobileICICI);
   static final bhim = UpiApplication._(_UpiApplication.bhim);
   static final miPay = UpiApplication._(_UpiApplication.miPay);
   static final amazonPay = UpiApplication._(_UpiApplication.amazonPay);
