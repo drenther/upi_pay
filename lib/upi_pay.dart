@@ -27,11 +27,6 @@ class InvalidAmountException extends _UpiException {
   InvalidAmountException(String msg) : super(msg);
 }
 
-class UpiAppIsNotInstalledException extends _UpiException {
-  UpiAppIsNotInstalledException([String msg])
-      : super(msg ?? 'UPI App is not installed');
-}
-
 enum UpiTransactionStatus { submitted, success, failure }
 
 class UpiTransactionResponse {
