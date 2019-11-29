@@ -3,6 +3,7 @@ enum _UpiApplication {
   phonePe,
   payTM,
   sbiPay,
+  iMobileICICI,
   bhim,
   miPay,
   amazonPay,
@@ -19,6 +20,7 @@ class UpiApplication {
   static final phonePe = UpiApplication._(_UpiApplication.phonePe);
   static final payTM = UpiApplication._(_UpiApplication.payTM);
   static final sbiPay = UpiApplication._(_UpiApplication.sbiPay);
+  static final iMobileICICI = UpiApplication._(UpiApplication.iMobileICICI);
   static final bhim = UpiApplication._(_UpiApplication.bhim);
   static final miPay = UpiApplication._(_UpiApplication.miPay);
   static final amazonPay = UpiApplication._(_UpiApplication.amazonPay);
@@ -35,6 +37,8 @@ class UpiApplication {
         return 'net.one97.paytm';
       case _UpiApplication.sbiPay:
         return 'com.sbi.upi';
+      case _UpiApplication.iMobileICICI:
+        return 'com.csam.icici.bank.imobile';
       case _UpiApplication.bhim:
         return 'in.org.npci.upiapp';
       case _UpiApplication.miPay:
