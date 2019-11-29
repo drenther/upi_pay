@@ -1,6 +1,6 @@
 name: upi_pay
-description: A new flutter plugin project.
-version: 0.1.0
+description: A flutter plugin to make payments by opening UPI applications using Android Intent and receiving the transaction information back in response.
+version: 0.1.1
 authors:
   - Soumyajit Pathak <s.pathak5995@gmail.com>
   - Sharad Chand <sharad@sharadchand.com>
