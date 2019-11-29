@@ -64,6 +64,8 @@ class UpiApplication {
         return 'Paytm';
       case _UpiApplication.sbiPay:
         return 'SBI Pay';
+      case _UpiApplication.iMobileICICI:
+        return 'iMobile by ICICI';
       case _UpiApplication.bhim:
         return 'BHIM';
       case _UpiApplication.miPay:
