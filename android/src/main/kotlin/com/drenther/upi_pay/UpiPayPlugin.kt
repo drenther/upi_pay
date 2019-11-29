@@ -1,6 +1,5 @@
 package com.drenther.upi_pay
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
@@ -12,7 +11,7 @@ import io.flutter.plugin.common.PluginRegistry.ActivityResultListener
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
 class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodChannel) : MethodCallHandler, ActivityResultListener {
-    private val activity: Activity = registrar.activity()
+    private val activity = registrar.activity()
 
     private var result: Result? = null
     private var requestCodeNumber = 201119
@@ -50,9 +49,14 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
                 }
 
                 val uri = uriBuilder.build()
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = uri
+                val intent = Intent(Intent.ACTION_VIEW, uri)
                 intent.setPackage(app)
+
+
+                if (intent.resolveActivity(activity.packageManager) == null) {
+                    this.success("activity_unavailable")
+                    return
+                }
 
                 activity.startActivityForResult(intent, requestCodeNumber)
                 this.result = result
