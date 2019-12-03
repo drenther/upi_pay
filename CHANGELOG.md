@@ -9,3 +9,7 @@
 ## 0.1.2
 
 - Added MIT License
+
+## 0.2.0
+
+- Upgraded kotlin_version to 1.3.61

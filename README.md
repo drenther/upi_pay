@@ -19,7 +19,7 @@ dependencies:
   flutter:
     sdk: flutter
   # adding upi_pay as dependency
-  upi_pay: ^0.1.0
+  upi_pay: ^0.2.0
 ```
 
 Then, import the package where you need to use it
@@ -36,25 +36,24 @@ import 'package:upi_pay/upi_pay.dart';
 
 You can call the `UpiPay.initiateTransaction` method to start an UPI Transaction
 
-
 #### Method Call
 
 ```dart
 UpiTransactionResponse txnResponse = await UpiPay.initiateTransaction(
   /// must be a string value of two decimal digits
-  amount: "10.00", 
+  amount: "10.00",
   /// UpiApplication class has all the supported applications
   /// only accepts a value from the UpiApplication class
-  app: UpiApplication.payTM, 
+  app: UpiApplication.payTM,
   /// Name of the person / merchant receiving the payment
-  receiverName: "John", 
+  receiverName: "John",
   /// UPI VPA of the person / merchant receiving the payment
-  receiverUpiAddress: "johnupi@paytm", 
+  receiverUpiAddress: "johnupi@paytm",
   /// unique ID for the transaction
   /// use your business / use case specific ID generation logic here
   transactionRef: 'ORD1215236',
 
-  /// there are some other optional parameters like 
+  /// there are some other optional parameters like
   /// [url], [merchantCode] and [transactionNode]
 
   /// url can be used share some additional data related to the transaction like invoice copy, etc.
@@ -76,16 +75,19 @@ UpiTransactionResponse txnResponse = await UpiPay.initiateTransaction(
 
 The response will be an instance of `UpiTransactionResponse`
 
-You can access the following properties on the response instance - 
+You can access the following properties on the response instance -
+
 - `txnId` - The Transaction ID from the PSP
 - `responseCode` - The UPI response code can be used to decipher the reason for failure (if any)
 - `approvalRefNo` - UPI Approval Reference Number
 - `status` - This can have one of the following status values
+
   - `UpiTransactionStatus.Success`
   - `UpiTransactionStatus.Failure`
   - `UpiTransactionStatus.Submitted`
-  
+
   Always prefer the use of `UpiTransactionStatus` enum to decipher the status of the transaction response for better code health
+
 - `txnRef` - The transaction ref that was passed when initiating the payment. Use this value to identify which transaction the response belongs to
 
 You can also access the raw URL response by accessing `rawResponse` on the response object
@@ -94,11 +96,12 @@ Take a look at the UPI Linking specification linked above to better understand t
 
 #### Exceptions
 
-The method can throw the following errors - 
+The method can throw the following errors -
+
 - `InvalidUpiAddressException` - if the UPI Receiver Address is not in valid format
 - `InvalidAmountException` - if the transaction amount is in invalid format (< 0 or > 1,00,000 or has more than 2 decimal digits)
 
-### Get UPI Applications 
+### Get UPI Applications
 
 You can list the UPI application that can handle an UPI Intent.
 
@@ -108,7 +111,7 @@ This API can be used to list all the UPI application on the user's device that c
 List<ApplicationMeta> upiApps = await UpiPay.getInstalledUpiApplications();
 ```
 
-The `ApplicationMeta` instance has the following properties on it - 
+The `ApplicationMeta` instance has the following properties on it -
 
 - `upiApplication` - an instance of the `UpiApplication` which can be passed as argument for the `app` parameter in `UpiPay.initiateTransaction`
 - `packageName` - the package name value like `net.one97.paytm` or `com.phonepe.app`
