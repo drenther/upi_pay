@@ -16,17 +16,16 @@ import io.flutter.plugin.common.PluginRegistry.ActivityResultListener
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import java.io.ByteArrayOutputStream
 
-
 class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodChannel) : MethodCallHandler, ActivityResultListener {
     private val activity = registrar.activity()
 
     private var result: Result? = null
     private var requestCodeNumber = 201119
 
-    var hasResponded = false;
+    var hasResponded = false
 
     override fun onMethodCall(call: MethodCall, result: Result) {
-        hasResponded = false;
+        hasResponded = false
 
         this.result = result
 
@@ -56,7 +55,6 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
             uriBuilder.appendQueryParameter("tr", tr)
             uriBuilder.appendQueryParameter("am", am)
             uriBuilder.appendQueryParameter("cu", cu)
-            uriBuilder.appendQueryParameter("mode", "intent")
             if (url != null) {
                 uriBuilder.appendQueryParameter("url", url)
             }
@@ -119,16 +117,13 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
                         "priority" to it.priority,
                         "preferredOrder" to it.preferredOrder
                 )
-
             }
-
 
             result?.success(activityResponse)
         } catch (ex: Exception) {
             Log.e("upi_pay", ex.toString())
             result?.error("getInstalledUpiApps", "exception", ex)
         }
-
     }
 
     private fun encodeToBase64(image: Bitmap): String? {
@@ -148,7 +143,7 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
     private fun success(o: String) {
         if (!hasResponded) {
             hasResponded = true
-            result?.success(o);
+            result?.success(o)
         }
     }
 
