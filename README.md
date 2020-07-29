@@ -1,4 +1,4 @@
-# upi_pay
+# upi_pay (android only)
 
 <img src="https://user-images.githubusercontent.com/12991390/69864983-244be680-12c6-11ea-918a-9d06c5e87110.png" height="720" width="360">
 
