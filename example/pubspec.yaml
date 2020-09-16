@@ -3,7 +3,7 @@ description: Demonstrates how to use the upi_pay plugin.
 publish_to: "none"
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: ">=2.5.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -12,6 +12,8 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
+  android_intent: ">=0.3.7+2"
+  razorpay_flutter: ^1.2.2
 
 dev_dependencies:
   flutter_test:

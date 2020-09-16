@@ -21,3 +21,7 @@
 ## 0.2.2
 
 - Mark the library as android only
+
+## 0.2.3
+
+- Added Axis Pay
