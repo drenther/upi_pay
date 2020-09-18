@@ -92,7 +92,8 @@ final List<UpiApplication> _validUpiPackageNames = [
   UpiApplication.miPay,
   UpiApplication.amazonPay,
   UpiApplication.trueCallerUpi,
-  UpiApplication.myAirtelUpi
+  UpiApplication.myAirtelUpi,
+  UpiApplication.axisPay,
 ];
 
 class UpiPay {
