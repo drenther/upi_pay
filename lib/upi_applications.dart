@@ -44,7 +44,7 @@ class UpiApplication {
       case _UpiApplication.bhim:
         return 'in.org.npci.upiapp';
       case _UpiApplication.miPay:
-        return 'com.mipay.wallet.in';
+        return 'com.mipay.in.wallet';
       case _UpiApplication.amazonPay:
         return 'in.amazon.mShop.android.shopping';
       case _UpiApplication.trueCallerUpi:
