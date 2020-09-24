@@ -89,11 +89,44 @@ final List<UpiApplication> _validUpiPackageNames = [
   UpiApplication.payTM,
   UpiApplication.sbiPay,
   UpiApplication.bhim,
-  UpiApplication.miPay,
+  UpiApplication.miPay, // Reetesh: Payment goes through, returns null txID and approval Ref
   UpiApplication.amazonPay,
-  UpiApplication.trueCallerUpi,
-  UpiApplication.myAirtelUpi,
+  UpiApplication.trueCallerUpi, // Reetesh: Repetitive mobile verification SMS failures
+  UpiApplication.myAirtelUpi, // Reetesh: Sends back empty transaction data
   UpiApplication.axisPay,
+  UpiApplication.allBank,
+  // UpiApplication.bhimAuPay, // Returns null value parameters in response after payment goes through
+  // UpiApplication.bhimBandhanUpi, // Repetitively says "something went wrong" while trying to pay
+  UpiApplication.bhimBarodaPay,
+  // UpiApplication.bhimBoiUpi, // Could never complete SMS verification
+  UpiApplication.bhimCentUpi,
+  UpiApplication.bhimCorpUpi,
+  // UpiApplication.bhimCsbUpi, // Hangs on the opening view
+  UpiApplication.bhimDcbUpi,
+  // UpiApplication.bhimIndianBankUpi, // Unstable behaviour around payments
+  UpiApplication.bhimIndusPayUpi,
+  // UpiApplication.bhimJetPay, // Intent invocation gets a java.lang.SecurityException: Permission Denial
+  // UpiApplication.bhimKblUpi, // Reports that "Mandatory values are missing"
+  // UpiApplication.bhimKvbUpay, // Does not auto fill input data
+  // UpiApplication.bhimLvbUpaay, // Post debit does not return to caller app with a response
+  UpiApplication.bhimOrientalPay,
+  UpiApplication.bhimPaywizV2,
+  UpiApplication.bhimPsb,
+  // UpiApplication.bhimRblPay, // Keeps looping the login screen
+  // UpiApplication.bhimSyndUpi, // Repetitively gives functional errors while trying to complete payment
+  // UpiApplication.bhimUcoUpi, // Reports that "Mandatory values are missing"
+  // UpiApplication.bhimVijayaUpi, // Could never complete SMS verification
+  UpiApplication.bhimYesPay,
+  UpiApplication.bPay,
+  // UpiApplication.canaraBank, // NEW (has a 24-hour wait time post installation)
+  UpiApplication.cointab,
+  UpiApplication.freecharge,
+  // UpiApplication.hsbcSimplyPay, // Sends null values for txnId and ApprovalRefNo post debit success
+  UpiApplication.iMobileICICI,
+  UpiApplication.khaaliJeb,
+  UpiApplication.mahaUpi,
+  UpiApplication.mobikwik,
+  // UpiApplication.ultraCash, // Repetitively says transaction canceled
 ];
 
 class UpiPay {
@@ -189,6 +222,7 @@ class UpiPay {
     final upiApps = appsList
         .map((app) {
           final packageName = _castToString(app['packageName']);
+          // print(packageName);
           final upiApp = _validUpiPackageNames.firstWhere(
             (it) => packageName == it.toString(),
             orElse: () => null,

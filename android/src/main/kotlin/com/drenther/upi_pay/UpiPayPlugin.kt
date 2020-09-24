@@ -48,6 +48,11 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
         val url: String? = call.argument("url")
 
         try {
+            /*
+             * Some UPI apps extract incorrect format VPA due to url encoding of `pa` parameter.
+             * For example, the VPA 'abc@upi' gets url encoded as 'abc%40upi' and is extracted as
+             * 'abc 40upi' by these apps. The URI building logic is changed to avoid URL encoding
+             * of the value of 'pa' parameter. - Reetesh
             val uriBuilder = Uri.Builder()
             uriBuilder.scheme("upi").authority("pay")
             uriBuilder.appendQueryParameter("pa", pa)
@@ -64,8 +69,29 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
             if (tn != null) {
                 uriBuilder.appendQueryParameter("tn", tn)
             }
+            uriBuilder.appendQueryParameter("mode", "00")
+            uriBuilder.appendQueryParameter("orgid", "000000")
+            val uriByBuilder = uriBuilder.build()
+            Log.d("upi_pay", "initiateTransaction URI (by builder): " + uriByBuilder.toString())
+            */
+            var uriStr: String? = "upi://pay?pa=" + pa +
+                    "&pn=" + Uri.encode(pn) +
+                    "&tr=" + Uri.encode(tr) +
+                    "&am=" + Uri.encode(am) +
+                    "&cu=" + Uri.encode(cu)
+            if(url != null) {
+                uriStr += ("&url=" + Uri.encode(url))
+            }
+            if(mc != null) {
+                uriStr += ("&mc=" + Uri.encode(mc))
+            }
+            if(tn != null) {
+                uriStr += ("&tn=" + Uri.encode(tn))
+            }
+            uriStr += "&mode=00" // &orgid=000000"
+            val uri = Uri.parse(uriStr)
+            // Log.d("upi_pay", "initiateTransaction URI: " + uri.toString())
 
-            val uri = uriBuilder.build()
             val intent = Intent(Intent.ACTION_VIEW, uri)
             intent.setPackage(app)
 
