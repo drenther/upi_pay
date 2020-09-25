@@ -118,7 +118,7 @@ final List<UpiApplication> _validUpiPackageNames = [
   // UpiApplication.bhimVijayaUpi, // Could never complete SMS verification
   UpiApplication.bhimYesPay,
   UpiApplication.bPay,
-  // UpiApplication.canaraBank, // NEW (has a 24-hour wait time post installation)
+  // UpiApplication.canaraBank, // Keeps saying transaction failed
   UpiApplication.cointab,
   UpiApplication.freecharge,
   // UpiApplication.hsbcSimplyPay, // Sends null values for txnId and ApprovalRefNo post debit success
