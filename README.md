@@ -1,5 +1,7 @@
 # upi_pay (android only)
 
+## CAUTION: A number of popular UPI Payment Apps like Google Pay, Paytm, etc. seems to be failing with arbitrary errors due to some changes to the UPI Spec and/or compliance regulations in recent months. Use at your own risk in production scenarios as these issues can not be resolved by us. Thank you!
+
 ## (Looking for maintainers)
 
 <img src="https://user-images.githubusercontent.com/12991390/69864983-244be680-12c6-11ea-918a-9d06c5e87110.png" height="720" width="360">
