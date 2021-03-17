@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 // for meta
-import 'package:flutter/material.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/services.dart';
 import 'package:upi_pay/upi_applications.dart';
@@ -20,8 +19,7 @@ class _UpiException implements Exception {
 }
 
 class InvalidUpiAddressException extends _UpiException {
-  InvalidUpiAddressException([String msg])
-      : super(msg ?? 'Invalid UPI Address');
+  InvalidUpiAddressException([String? msg]) : super(msg ?? 'Invalid UPI Address');
 }
 
 class InvalidAmountException extends _UpiException {
@@ -31,12 +29,12 @@ class InvalidAmountException extends _UpiException {
 enum UpiTransactionStatus { submitted, success, failure }
 
 class UpiTransactionResponse {
-  String txnId;
-  String responseCode;
-  String approvalRefNo;
-  UpiTransactionStatus status;
-  String txnRef;
-  String rawResponse;
+  late String txnId;
+  late String responseCode;
+  late String approvalRefNo;
+  late UpiTransactionStatus status;
+  late String txnRef;
+  late String rawResponse;
 
   UpiTransactionResponse(String responseString) {
     this.rawResponse = responseString;
@@ -133,21 +131,15 @@ class UpiPay {
   ///
   /// UPI Linking Specification - https://www.npci.org.in/sites/default/files/UPI%20Linking%20Specs_ver%201.6.pdf
   static Future<UpiTransactionResponse> initiateTransaction({
-    @required UpiApplication app,
-    @required String receiverUpiAddress,
-    @required String receiverName,
-    @required String transactionRef,
-    @required String amount,
-    String url,
-    String transactionNote,
-    String merchantCode,
+    required UpiApplication app,
+    required String receiverUpiAddress,
+    required String receiverName,
+    required String transactionRef,
+    required String amount,
+    String? url,
+    String? transactionNote,
+    String? merchantCode,
   }) async {
-    assert(app != null);
-    assert(receiverUpiAddress != null);
-    assert(receiverName != null);
-    assert(transactionRef != null);
-    assert(amount != null);
-
     // check receiver address validity
     if (!UpiPay.checkIfUpiAddressIsValid(receiverUpiAddress)) {
       throw InvalidUpiAddressException();
@@ -156,8 +148,7 @@ class UpiPay {
     // check amount validity
     final Decimal am = Decimal.parse(amount);
     if (am.scale > 2) {
-      throw InvalidAmountException(
-          'Amount must not have more than 2 digits after decimal point');
+      throw InvalidAmountException('Amount must not have more than 2 digits after decimal point');
     }
     if (am <= Decimal.zero) {
       throw InvalidAmountException('Amount must be greater than 1');
@@ -183,35 +174,24 @@ class UpiPay {
   }
 
   static Future<List<ApplicationMeta>> getInstalledUpiApplications() async {
-    final appsList =
-        await _channel.invokeListMethod<Map>('getInstalledUpiApps');
+    final appsList = await _channel.invokeListMethod<Map>('getInstalledUpiApps');
 
-    final upiApps = appsList
-        .map((app) {
-          final packageName = _castToString(app['packageName']);
-          final upiApp = _validUpiPackageNames.firstWhere(
-            (it) => packageName == it.toString(),
-            orElse: () => null,
-          );
+    final upiApps = appsList!.map((app) {
+      final packageName = _castToString(app['packageName']);
+      final upiApp = _validUpiPackageNames.firstWhere((it) => packageName == it.toString());
 
-          if (upiApp == null) {
-            return null;
-          }
+      final icon = _castToString(app['icon']);
+      final priority = _castToInt(app['priority']);
+      final preferredOrder = _castToInt(app['preferredOrder']);
 
-          final icon = _castToString(app['icon']);
-          final priority = _castToInt(app['priority']);
-          final preferredOrder = _castToInt(app['preferredOrder']);
-
-          return ApplicationMeta._(
-            upiApp,
-            packageName,
-            base64.decode(icon),
-            priority,
-            preferredOrder,
-          );
-        })
-        .where((it) => it != null)
-        .toList();
+      return ApplicationMeta._(
+        upiApp,
+        packageName,
+        base64.decode(icon),
+        priority,
+        preferredOrder,
+      );
+    }).toList();
 
     return upiApps;
   }
