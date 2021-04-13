@@ -177,7 +177,7 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
         if (requestCodeNumber == requestCode && result != null) {
             if (data != null) {
                 try {
-                    val response = data.getStringExtra("response")
+                    val response = data.getStringExtra("response")!!
                     this.success(response)
                 } catch (ex: Exception) {
                     this.success("invalid_response")

@@ -25,3 +25,7 @@
 ## 0.2.3
 
 - Added Axis Pay
+
+## 0.2.4
+
+- Updated MiPay package identifier and fix Axis Pay usage
