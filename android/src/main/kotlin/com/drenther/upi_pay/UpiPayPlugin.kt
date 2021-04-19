@@ -53,26 +53,6 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
              * For example, the VPA 'abc@upi' gets url encoded as 'abc%40upi' and is extracted as
              * 'abc 40upi' by these apps. The URI building logic is changed to avoid URL encoding
              * of the value of 'pa' parameter. - Reetesh
-            val uriBuilder = Uri.Builder()
-            uriBuilder.scheme("upi").authority("pay")
-            uriBuilder.appendQueryParameter("pa", pa)
-            uriBuilder.appendQueryParameter("pn", pn)
-            uriBuilder.appendQueryParameter("tr", tr)
-            uriBuilder.appendQueryParameter("am", am)
-            uriBuilder.appendQueryParameter("cu", cu)
-            if (url != null) {
-                uriBuilder.appendQueryParameter("url", url)
-            }
-            if (mc != null) {
-                uriBuilder.appendQueryParameter("mc", mc)
-            }
-            if (tn != null) {
-                uriBuilder.appendQueryParameter("tn", tn)
-            }
-            uriBuilder.appendQueryParameter("mode", "00")
-            uriBuilder.appendQueryParameter("orgid", "000000")
-            val uriByBuilder = uriBuilder.build()
-            Log.d("upi_pay", "initiateTransaction URI (by builder): " + uriByBuilder.toString())
             */
             var uriStr: String? = "upi://pay?pa=" + pa +
                     "&pn=" + Uri.encode(pn) +
@@ -110,12 +90,6 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
     private fun getInstalledUpiApps() {
         val uriBuilder = Uri.Builder()
         uriBuilder.scheme("upi").authority("pay")
-        uriBuilder.appendQueryParameter("pa", "abc@ybl")
-        uriBuilder.appendQueryParameter("pn", "abc")
-        uriBuilder.appendQueryParameter("tr", "123")
-        uriBuilder.appendQueryParameter("am", "10")
-        uriBuilder.appendQueryParameter("cu", "INR")
-        uriBuilder.appendQueryParameter("mode", "intent")
 
         val uri = uriBuilder.build()
         val intent = Intent(Intent.ACTION_VIEW, uri)

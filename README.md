@@ -1,129 +1,165 @@
-# upi_pay (android only)
+# upi_pay
 
-## CAUTION: A number of popular UPI Payment Apps like Google Pay, Paytm, etc. seems to be failing with arbitrary errors due to some changes to the UPI Spec and/or compliance regulations in recent months. Use at your own risk in production scenarios as these issues can not be resolved by us. Thank you!
+Find installed UPI payment apps on your phone and make payments using any one of them.
 
-## (Looking for maintainers)
+Package implements [UPI Deep Linking And Proximity Integration Specification](https://github.com/reeteshranjan/upi_pay/files/6338127/UPI.Linking.Specs_ver.1.6.pdf).
 
-<img src="https://user-images.githubusercontent.com/12991390/69864983-244be680-12c6-11ea-918a-9d06c5e87110.png" height="720" width="360">
-
-A flutter plugin to make payments by opening UPI applications using **Android Intent** and receiving the transaction information back in response.
-
-The plugin also provides additional APIs to query and list installed applications.
-
-[The plugins follows the UPI Deep Linking Specification](https://www.npci.org.in/sites/default/files/UPI%20Linking%20Specs_ver%201.6.pdf)
-
----
+Android | iOS
+-|-
+![Android Screen Capture](https://user-images.githubusercontent.com/5516599/115283164-a4e3df00-a168-11eb-878b-c3dbe6e53aa7.gif) | ![IOS Screen Capture](https://user-images.githubusercontent.com/5516599/115283187-aa412980-a168-11eb-9c03-5ae8dce30d78.gif)
 
 ## Getting Started
 
-First, add the package to your flutter project's `pubspec.yaml` as a dependency
+Add this package to your flutter project's `pubspec.yaml` as a dependency as follows:
 
 ```yaml
 dependencies:
-  flutter:
-    sdk: flutter
-  # adding upi_pay as dependency
-  upi_pay: ^0.2.0
+  ...
+  upi_pay: ^0.3.0
 ```
 
-Then, import the package where you need to use it
+Import the package as follows:
 
 ```dart
 import 'package:upi_pay/upi_pay.dart';
 ```
 
----
+### iOS configuration
 
-## Documentation
+In `Runner/Info.plist` add or modify the `LSApplicationQueriesSchemes` key so it includes custom query schemes shown as follows:
 
-### Start a UPI Transaction
-
-You can call the `UpiPay.initiateTransaction` method to start an UPI Transaction
-
-#### Method Call
-
-```dart
-UpiTransactionResponse txnResponse = await UpiPay.initiateTransaction(
-  /// must be a string value of two decimal digits
-  amount: "10.00",
-  /// UpiApplication class has all the supported applications
-  /// only accepts a value from the UpiApplication class
-  app: UpiApplication.payTM,
-  /// Name of the person / merchant receiving the payment
-  receiverName: "John",
-  /// UPI VPA of the person / merchant receiving the payment
-  receiverUpiAddress: "johnupi@paytm",
-  /// unique ID for the transaction
-  /// use your business / use case specific ID generation logic here
-  transactionRef: 'ORD1215236',
-
-  /// there are some other optional parameters like
-  /// [url], [merchantCode] and [transactionNode]
-
-  /// url can be used share some additional data related to the transaction like invoice copy, etc.
-  url: 'www.johnshop.com/order/ORD1215236',
-
-  /// this is code that identifies the type of the merchant
-  /// if you have a merchant UPI VPA as the receiver address
-  /// add the relevant merchant code for seamless payment experience
-  /// some application may reject payment intent if merchant code is missing
-  /// when making a P2M (payment to merchant VPA) transaction
-  merchantCode: 1032,
-
-  /// anything that provides some desription of the transaction
-  transactionNote: 'Test transaction'
-)
+```xml
+  <key>LSApplicationQueriesSchemes</key>
+  <array>
+    ...
+    <string>freecharge</string>
+    <string>gpay</string>
+    <string>in.fampay.app</string>
+    <string>lotza</string>
+    <string>mobikwik</string>
+    <string>paytm</string>
+    <string>phonepe</string>
+    <string>upi</string>
+    <string>upibillpay</string>
+    <string>whatsapp</string>
+    ...
+  </array>
 ```
 
-#### Response
+### Usage
 
-The response will be an instance of `UpiTransactionResponse`
-
-You can access the following properties on the response instance -
-
-- `txnId` - The Transaction ID from the PSP
-- `responseCode` - The UPI response code can be used to decipher the reason for failure (if any)
-- `approvalRefNo` - UPI Approval Reference Number
-- `status` - This can have one of the following status values
-
-  - `UpiTransactionStatus.Success`
-  - `UpiTransactionStatus.Failure`
-  - `UpiTransactionStatus.Submitted`
-
-  Always prefer the use of `UpiTransactionStatus` enum to decipher the status of the transaction response for better code health
-
-- `txnRef` - The transaction ref that was passed when initiating the payment. Use this value to identify which transaction the response belongs to
-
-You can also access the raw URL response by accessing `rawResponse` on the response object
-
-Take a look at the UPI Linking specification linked above to better understand the meaning of these fields
-
-#### Exceptions
-
-The method can throw the following errors -
-
-- `InvalidUpiAddressException` - if the UPI Receiver Address is not in valid format
-- `InvalidAmountException` - if the transaction amount is in invalid format (< 0 or > 1,00,000 or has more than 2 decimal digits)
-
-### Get UPI Applications
-
-You can list the UPI application that can handle an UPI Intent.
-
-This API can be used to list all the UPI application on the user's device that can be used to complete an UPI transaction.
+#### Get list of installed apps
 
 ```dart
-List<ApplicationMeta> upiApps = await UpiPay.getInstalledUpiApplications();
+final List<ApplicationMeta> appMetaList = await UpiPay.getInstalledUpiApps();
 ```
 
-The `ApplicationMeta` instance has the following properties on it -
+#### Show an app's details
 
-- `upiApplication` - an instance of the `UpiApplication` which can be passed as argument for the `app` parameter in `UpiPay.initiateTransaction`
-- `packageName` - the package name value like `net.one97.paytm` or `com.phonepe.app`
-- `icon` - stores the icon of the package in `UInt8List` format and hence can be used to render the icon as such `Image.memory(icon, width: 64, height: 64)`
-- `preferredOrder` - the order of app in the UPI Intent results according to user's preference (earlier usage). This can be used to highlight the most recently used apps by the User for making UPI payments.
+```dart
+Widget appWidget(ApplicationMeta appMeta) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      appMeta.iconImage(48), // Logo
+      Container(
+        margin: EdgeInsets.only(top: 4),
+        alignment: Alignment.center,
+        child: Text(
+          appMeta.application.getAppName(),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    ],
+  );
+}
+```
 
----
+#### Do a UPI transaction
 
-## Example
+```dart
+Future doUpiTransation(ApplicationMeta appMeta) {
+  final UpiTransactionResponse response = await UpiPay.initiateTransaction(
+    amount: '100.00',
+    app: appMeta.application,
+    receiverName: 'John Doe',
+    receiverUpiAddress: 'john@doe',
+    transactionRef: 'UPITXREF0001',
+    transactionNote: 'A UPI Transaction',
+  );
+  print(response.status);
+}
+```
 
-We have an [example application in the same repo](https://github.com/drenther/upi_pay/tree/master/example) and that can be used a reference
+## Behaviour, Limitations & Measures
+
+### Android
+
+#### Flow
+* On Android, the [UPI Deep Linking And Proximity Integration Specification](https://github.com/reeteshranjan/upi_pay/files/6338127/UPI.Linking.Specs_ver.1.6.pdf) is implemented using Intents.
+* An Intent call with transaction request parameters includes the specific UPI app to be invoked.
+* Post the UPI transaction being processed by the chosen Android UPI app, it returns a response as per the format defined in the specification to the package's Android plugin layer.
+* The plugin layer parses this response to create a `UpiTransactionResponse` object that is returned to your calling code. This object clearly indicates the status of the UPI payment, i.e. was it successful, failed or being processed.
+
+#### Measures
+
+It is advised that you implement a server-side payment verification on top of this status reporting, to avoid being affected by any hacks in the UPI transaction workflow on client's phone.
+
+### iOS
+
+#### Flow
+
+* On iOS, the [UPI Deep Linking And Proximity Integration Specification](https://github.com/reeteshranjan/upi_pay/files/6338127/UPI.Linking.Specs_ver.1.6.pdf) is implemented using iOS custom schemes.
+* Each UPI payment app can listen to a payment request of the form `upi://pay?...` sent by a caller app to iOS.
+* The specification does not let you specify the target app's identifier in this request. On iOS, there is no other disambiguation measure available such as any ordering of the UPI payment apps that can be retrieved using any iOS APIs. Hence, it's impossible to know which UPI payment app will be invoked.
+* One of the applicable apps gets invoked and it processes the payment. The custom schemes mechanism has no way to return a transaction status to your calling code. The calling code can only know if a UPI payment app was launched successfully or not.
+
+#### How does the package then implement `getInstalledUpiApps`?
+
+The apps that implement any other unique custom scheme other than `upi` are discovered using such custom schemes. In the list of returned apps, both the reliably discovered apps and the supported but undetectable apps are returned.
+
+Your code can distinguish if an app in the list of discovered apps was detected or not by checking as follows:
+
+```dart
+bool isAppReallyDiscovered(ApplicationMeta applicationMeta) {
+  return applicationMeta.application.discoveryCustomScheme != null
+}
+```
+
+#### Measures
+
+* You will have to implement a payment verification on top of functionality available through this package.
+* You should distinguish discovered and supported-only apps using the mechanism in the above section. The example app can be used for reference.
+
+## UPI Apps' Functional Status Dynamics
+
+UPI standards and systems are evolving, and accordingly behaviour and functionality of the UPI payment apps are changing. See [Apps](https://github.com/reeteshranjan/upi_pay/blob/master/APPS.md) for details of current functional status of various applications that were verified by us.
+
+### Support for merchant and non-merchant payments
+
+The [UPI Deep Linking And Proximity Integration Specification](https://github.com/reeteshranjan/upi_pay/files/6338127/UPI.Linking.Specs_ver.1.6.pdf) is designed for merchant payments. It includes parameters in payment request that can be provided only if the payment was made to a merchant e.g. the merchant code (`mc` parameter), and a signature (crypto-hash) of the request created using merchant's private key.
+
+However; various applications have been accepting requests without merchant details and signature and successfully processing payments. Possibly, the dilution could be due to the reason that such a package can only automate filling a payment form, and unless the user verifies the details in the form and enters the UPI pin, no damaging payments can be really made.
+
+Over last few months, few applications have started changing their behaviour around non-merchant payments and one or more of the following are seen in few apps:
+
+* An implicit "unverified source" warning or a direct warning indicating that merchant data in the request is not correct
+* Z7 error, "Transaction Frequency Limit Exceeded": See [UPI Error and Response Codes](https://github.com/reeteshranjan/upi_pay/files/6338492/PHN6WKI7_UPI_Error_and_Response_Codes_V_2_3_1.pdf)
+* U16 error, "Risk Threshold Exceeded", see [UPI Error and Response Codes](https://github.com/reeteshranjan/upi_pay/files/6338492/PHN6WKI7_UPI_Error_and_Response_Codes_V_2_3_1.pdf)
+* An implicit "Security error"
+
+This behaviour sometimes is not consistent even for the same app. For example, WhatsApp successfully completes transactions on iOS; but rejects non-merchant transactions on Android.
+
+If you believe that your app's users' money is secure via their UPI pin, and you can let them use apps that successfully complete non-merchant transactions, then go ahead and pick the working apps in [Apps](https://github.com/reeteshranjan/upi_pay/blob/master/APPS.md) and integrate this package.
+
+### Regressions
+
+It's seen that post the Bank mergers of 2020-21 some of the bank apps have stopped working, even though they are still in Play Store and/or App Store.
+
+### iOS minimum versions
+
+Several BHIM apps have stopped working on <iOS 13.5. This package's iOS support is verified on iPhone with iOS 14+.
+
+### Love to experiment yourself?
+
+Default behaviour of the `getInstalledUpiApps` API is to give you only the completely successfully working UPI apps. You can make the package return other apps by passing relevant values for parameters of this API. Please see API documentation. To support this experimentation, we would add further tweaking to allow you to access UPI apps not seen and supported by this package shortly on Android.

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="generator" content="made with love by dartdoc 0.42.0">
+  <meta name="description" content="upi_pay API docs, for the Dart programming language.">
+  <title>upi_pay - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+  
+</head>
+
+
+<body data-base-href=""
+      data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="https://github.com/drenther/upi_pay">upi_pay package</a></li>
+  </ol>
+  <div class="self-name">upi_pay</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="https://github.com/drenther/upi_pay">upi_pay package</a></li>
+</ol>
+
+
+    <h5 class="hidden-xs"><span class="package-name">upi_pay</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="upi_pay/upi_pay-library.html">upi_pay</a></li>
+</ol>
+
+  </div>
+
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <h1 id="upi_pay-android-only">upi_pay (android only)</h1>
+<h2 id="caution-a-number-of-popular-upi-payment-apps-like-google-pay-paytm-etc-seems-to-be-failing-with-arbitrary-errors-due-to-some-changes-to-the-upi-spec-andor-compliance-regulations-in-recent-months-use-at-your-own-risk-in-production-scenarios-as-these-issues-can-not-be-resolved-by-us-thank-you">CAUTION: A number of popular UPI Payment Apps like Google Pay, Paytm, etc. seems to be failing with arbitrary errors due to some changes to the UPI Spec and/or compliance regulations in recent months. Use at your own risk in production scenarios as these issues can not be resolved by us. Thank you!</h2>
+<h2 id="looking-for-maintainers">(Looking for maintainers)</h2><img src="https://user-images.githubusercontent.com/12991390/69864983-244be680-12c6-11ea-918a-9d06c5e87110.png" height="720" width="360">
+<p>A flutter plugin to make payments by opening UPI applications using <strong>Android Intent</strong> and receiving the transaction information back in response.</p>
+<p>The plugin also provides additional APIs to query and list installed applications.</p>
+<p><a href="https://www.npci.org.in/sites/default/files/UPI%20Linking%20Specs_ver%201.6.pdf">The plugins follows the UPI Deep Linking Specification</a></p>
+<hr>
+<h2 id="getting-started">Getting Started</h2>
+<p>First, add the package to your flutter project's <code>pubspec.yaml</code> as a dependency</p>
+<pre class="language-yaml"><code class="language-yaml">dependencies:
+  flutter:
+    sdk: flutter
+  # adding upi_pay as dependency
+  upi_pay: ^0.2.0
+</code></pre>
+<p>Then, import the package where you need to use it</p>
+<pre class="language-dart"><code class="language-dart">import 'package:upi_pay/upi_pay.dart';
+</code></pre>
+<hr>
+<h2 id="documentation">Documentation</h2>
+<h3 id="start-a-upi-transaction">Start a UPI Transaction</h3>
+<p>You can call the <code>UpiPay.initiateTransaction</code> method to start an UPI Transaction</p>
+<h4 id="method-call">Method Call</h4>
+<pre class="language-dart"><code class="language-dart">UpiTransactionResponse txnResponse = await UpiPay.initiateTransaction(
+  /// must be a string value of two decimal digits
+  amount: "10.00",
+  /// UpiApplication class has all the supported applications
+  /// only accepts a value from the UpiApplication class
+  app: UpiApplication.payTM,
+  /// Name of the person / merchant receiving the payment
+  receiverName: "John",
+  /// UPI VPA of the person / merchant receiving the payment
+  receiverUpiAddress: "johnupi@paytm",
+  /// unique ID for the transaction
+  /// use your business / use case specific ID generation logic here
+  transactionRef: 'ORD1215236',
+
+  /// there are some other optional parameters like
+  /// [url], [merchantCode] and [transactionNode]
+
+  /// url can be used share some additional data related to the transaction like invoice copy, etc.
+  url: 'www.johnshop.com/order/ORD1215236',
+
+  /// this is code that identifies the type of the merchant
+  /// if you have a merchant UPI VPA as the receiver address
+  /// add the relevant merchant code for seamless payment experience
+  /// some application may reject payment intent if merchant code is missing
+  /// when making a P2M (payment to merchant VPA) transaction
+  merchantCode: 1032,
+
+  /// anything that provides some desription of the transaction
+  transactionNote: 'Test transaction'
+)
+</code></pre>
+<h4 id="response">Response</h4>
+<p>The response will be an instance of <code>UpiTransactionResponse</code></p>
+<p>You can access the following properties on the response instance -</p>
+<ul>
+<li>
+<p><code>txnId</code> - The Transaction ID from the PSP</p>
+</li>
+<li>
+<p><code>responseCode</code> - The UPI response code can be used to decipher the reason for failure (if any)</p>
+</li>
+<li>
+<p><code>approvalRefNo</code> - UPI Approval Reference Number</p>
+</li>
+<li>
+<p><code>status</code> - This can have one of the following status values</p>
+<ul>
+<li><code>UpiTransactionStatus.Success</code></li>
+<li><code>UpiTransactionStatus.Failure</code></li>
+<li><code>UpiTransactionStatus.Submitted</code></li>
+</ul>
+<p>Always prefer the use of <code>UpiTransactionStatus</code> enum to decipher the status of the transaction response for better code health</p>
+</li>
+<li>
+<p><code>txnRef</code> - The transaction ref that was passed when initiating the payment. Use this value to identify which transaction the response belongs to</p>
+</li>
+</ul>
+<p>You can also access the raw URL response by accessing <code>rawResponse</code> on the response object</p>
+<p>Take a look at the UPI Linking specification linked above to better understand the meaning of these fields</p>
+<h4 id="exceptions">Exceptions</h4>
+<p>The method can throw the following errors -</p>
+<ul>
+<li><code>InvalidUpiAddressException</code> - if the UPI Receiver Address is not in valid format</li>
+<li><code>InvalidAmountException</code> - if the transaction amount is in invalid format (&lt; 0 or &gt; 1,00,000 or has more than 2 decimal digits)</li>
+</ul>
+<h3 id="get-upi-applications">Get UPI Applications</h3>
+<p>You can list the UPI application that can handle an UPI Intent.</p>
+<p>This API can be used to list all the UPI application on the user's device that can be used to complete an UPI transaction.</p>
+<pre class="language-dart"><code class="language-dart">List&lt;ApplicationMeta&gt; upiApps = await UpiPay.getInstalledUpiApplications();
+</code></pre>
+<p>The <code>ApplicationMeta</code> instance has the following properties on it -</p>
+<ul>
+<li><code>upiApplication</code> - an instance of the <code>UpiApplication</code> which can be passed as argument for the <code>app</code> parameter in <code>UpiPay.initiateTransaction</code></li>
+<li><code>packageName</code> - the package name value like <code>net.one97.paytm</code> or <code>com.phonepe.app</code></li>
+<li><code>icon</code> - stores the icon of the package in <code>UInt8List</code> format and hence can be used to render the icon as such <code>Image.memory(icon, width: 64, height: 64)</code></li>
+<li><code>preferredOrder</code> - the order of app in the UPI Intent results according to user's preference (earlier usage). This can be used to highlight the most recently used apps by the User for making UPI payments.</li>
+</ul>
+<hr>
+<h2 id="example">Example</h2>
+<p>We have an <a href="https://github.com/drenther/upi_pay/tree/master/example">example application in the same repo</a> and that can be used a reference</p>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+          <dt id="upi_pay">
+  <span class="name"><a href="upi_pay/upi_pay-library.html">upi_pay</a></span> 
+
+</dt>
+<dd> 
+</dd>
+
+        </dl>
+      </section>
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+
+</main>
+
+<footer>
+  <span class="no-break">
+    upi_pay
+      0.3.0
+  </span>
+
+  
+</footer>
+
+
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+
+</body>
+
+</html>
+

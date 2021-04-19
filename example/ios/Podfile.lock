@@ -1,0 +1,22 @@
+PODS:
+  - Flutter (1.0.0)
+  - upi_pay (0.3.0):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - upi_pay (from `.symlinks/plugins/upi_pay/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  upi_pay:
+    :path: ".symlinks/plugins/upi_pay/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  upi_pay: 5f045df27f779977236d21bd3fe2d687234cebbf
+
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+
+COCOAPODS: 1.10.0

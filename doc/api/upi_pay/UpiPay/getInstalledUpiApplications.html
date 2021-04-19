@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the getInstalledUpiApplications method from the UpiPay class, for the Dart programming language.">
+  <title>getInstalledUpiApplications method - UpiPay class - upi_pay library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="../../static-assets/github.css">
+  <link rel="stylesheet" href="../../static-assets/styles.css">
+  <link rel="icon" href="../../static-assets/favicon.png">
+
+  
+</head>
+
+
+<body data-base-href="../../"
+      data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">upi_pay</a></li>
+    <li><a href="../../upi_pay/upi_pay-library.html">upi_pay</a></li>
+    <li><a href="../../upi_pay/UpiPay-class.html">UpiPay</a></li>
+    <li class="self-crumb">getInstalledUpiApplications method</li>
+  </ol>
+  <div class="self-name">getInstalledUpiApplications</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="../../index.html">upi_pay</a></li>
+  <li><a href="../../upi_pay/upi_pay-library.html">upi_pay</a></li>
+  <li><a href="../../upi_pay/UpiPay-class.html">UpiPay</a></li>
+  <li class="self-crumb">getInstalledUpiApplications method</li>
+</ol>
+
+
+    <h5>UpiPay class</h5>
+    <ol>
+
+    <li class="section-title"><a href="../../upi_pay/UpiPay-class.html#constructors">Constructors</a></li>
+    <li><a href="../../upi_pay/UpiPay/UpiPay.html">UpiPay</a></li>
+
+
+    <li class="section-title inherited">
+      <a href="../../upi_pay/UpiPay-class.html#instance-properties">Properties</a>
+    </li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></li>
+
+    <li class="section-title inherited"><a href="../../upi_pay/UpiPay-class.html#instance-methods">Methods</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></li>
+
+    <li class="section-title inherited"><a href="../../upi_pay/UpiPay-class.html#operators">Operators</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></li>
+
+
+
+    <li class="section-title"><a href="../../upi_pay/UpiPay-class.html#static-methods">Static methods</a></li>
+    <li><a href="../../upi_pay/UpiPay/getInstalledUpiApplications.html">getInstalledUpiApplications</a></li>
+    <li><a href="../../upi_pay/UpiPay/initiateTransaction.html">initiateTransaction</a></li>
+
+</ol>
+
+  </div><!--/.sidebar-offcanvas-->
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-method">getInstalledUpiApplications</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../upi_pay/ApplicationMeta-class.html">ApplicationMeta</a></span>&gt;</span></span>&gt;</span></span>
+<span class="name ">getInstalledUpiApplications</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="getInstalledUpiApplications-param-paymentType">{<span class="type-annotation"><a href="../../upi_pay/UpiApplicationDiscoveryAppPaymentType-class.html">UpiApplicationDiscoveryAppPaymentType</a></span> <span class="parameter-name">paymentType</span> = <span class="default-value">UpiApplicationDiscoveryAppPaymentType.nonMerchant</span>, </span></li>
+<li><span class="parameter" id="getInstalledUpiApplications-param-statusType"><span class="type-annotation"><a href="../../upi_pay/UpiApplicationDiscoveryAppStatusType-class.html">UpiApplicationDiscoveryAppStatusType</a></span> <span class="parameter-name">statusType</span> = <span class="default-value">UpiApplicationDiscoveryAppStatusType.working</span>}</span></li>
+</ol>)
+
+      
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Finds installed UPI payment applications.</p>
+<p>Default behaviour is to present all applications verified to be working
+properly.</p>
+<p><code>statusType</code> can be used to change the default behaviour. Setting it to
+<a href="../../upi_pay/UpiApplicationDiscoveryAppStatusType-class.html">UpiApplicationDiscoveryAppStatusType.workingWithWarnings</a> will fetch
+all apps that work but produce a "unverified source" or relevant error
+caused due to lack of using the merchant's signature parameter in this
+package (See <code>mc</code> and <code>sign</code> in <a href="https://www.npci.org.in/sites/default/files/UPI%20Linking%20Specs_ver%201.6.pdf">UPI Linking Specification</a>).
+Currently this package does not implement merchant payments as per the
+specification, and rather helps with individual-to-individual payments
+that do not require merchant details. It's an upcoming feature. Setting
+<code>statusType</code> to <a href="../../upi_pay/UpiApplicationDiscoveryAppStatusType-class.html">UpiApplicationDiscoveryAppStatusType.all</a> will fetch all
+the apps. UPI researchers can use this value to experiment with the
+UPI apps this package can detect.</p>
+<p><code>paymentType</code> must be <a href="../../upi_pay/UpiApplicationDiscoveryAppPaymentType-class.html">UpiApplicationDiscoveryAppPaymentType.nonMerchant</a>
+for now. Setting it to any other value will lead to <a href="https://api.flutter.dev/flutter/dart-core/UnsupportedError-class.html">UnsupportedError</a>.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">static Future&lt;List&lt;ApplicationMeta&gt;&gt; getInstalledUpiApplications({
+  UpiApplicationDiscoveryAppPaymentType paymentType:
+      UpiApplicationDiscoveryAppPaymentType.nonMerchant,
+  UpiApplicationDiscoveryAppStatusType statusType:
+      UpiApplicationDiscoveryAppStatusType.working,
+}) async {
+  if (paymentType != UpiApplicationDiscoveryAppPaymentType.nonMerchant) {
+    throw UnsupportedError(&#39;The parameter `paymentType` must be &#39;
+        &#39;`UpiApplicationDiscoveryAppPaymentType.nonMerchant`&#39;);
+  }
+  if (_upiApplicationStatuses.isEmpty) {
+    return [];
+  }
+  return await _discovery.discover(
+    upiMethodChannel: _channel,
+    applicationStatusMap: _upiApplicationStatuses,
+    paymentType: paymentType,
+    statusType: statusType,
+  );
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    upi_pay
+      0.3.0
+  </span>
+
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js"></script>
+<script src="../../static-assets/script.js"></script>
+
+
+
+</body>
+
+</html>
+
