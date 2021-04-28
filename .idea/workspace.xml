@@ -22,7 +22,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9e2799ea-5950-4deb-aadd-4725fc8aa990" name="Default Changelist" comment="" />
+    <list default="true" id="9e2799ea-5950-4deb-aadd-4725fc8aa990" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -111,10 +113,10 @@
       <screen x="0" y="25" width="1440" height="875" />
     </state>
     <state x="221" y="98" key="SettingsEditor/0.25.1440.875@0.25.1440.875" timestamp="1618378719510" />
-    <state x="412" y="217" width="615" height="490" key="find.popup" timestamp="1618834556222">
+    <state x="714" y="244" width="615" height="490" key="find.popup" timestamp="1619615080895">
       <screen x="0" y="25" width="1440" height="875" />
     </state>
-    <state x="412" y="217" width="615" height="490" key="find.popup/0.25.1440.875@0.25.1440.875" timestamp="1618834556222" />
+    <state x="714" y="244" width="615" height="490" key="find.popup/0.25.1440.875@0.25.1440.875" timestamp="1619615080895" />
     <state x="385" y="110" width="670" height="676" key="search.everywhere.popup" timestamp="1618834389824">
       <screen x="0" y="25" width="1440" height="875" />
     </state>

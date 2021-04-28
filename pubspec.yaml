@@ -1,6 +1,6 @@
 name: upi_pay
 description: A flutter plugin to launch UPI payment applications on Android and iOS towards making UPI payments.
-version: 0.3.1
+version: 0.3.2
 
 homepage: https://github.com/drenther/upi_pay
 
@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   decimal: ^1.0.0+1
+  universal_io: 1.0.2
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,6 @@
-import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:universal_io/io.dart';
 import 'package:upi_pay/src/applications.dart';
 import 'package:flutter/material.dart';
 

@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:universal_io/io.dart';
 import 'package:flutter/services.dart';
 import 'package:upi_pay/src/transaction_details.dart';
 

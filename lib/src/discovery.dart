@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 
+import 'package:universal_io/io.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:upi_pay/src/applications.dart';
 import 'package:upi_pay/src/method_channel.dart';
