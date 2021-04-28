@@ -1,12 +1,12 @@
-import 'package:universal_io/io.dart';
+import 'package:universal_io/io.dart' as io;
 import 'package:upi_pay/src/method_channel.dart';
 import 'package:upi_pay/src/response.dart';
 import 'package:upi_pay/src/transaction_details.dart';
 
 class UpiTransactionHelper implements _PlatformTransactionHelperBase {
-  final helper = Platform.isAndroid
+  final helper = io.Platform.isAndroid
       ? AndroidTransactionHelper()
-      : Platform.isIOS
+      : io.Platform.isIOS
           ? IosTransactionHelper()
           : null;
   static final _singleton = UpiTransactionHelper._inner();
@@ -18,7 +18,7 @@ class UpiTransactionHelper implements _PlatformTransactionHelperBase {
   @override
   Future<UpiTransactionResponse> transact(UpiMethodChannel upiMethodChannel,
       TransactionDetails transactionDetails) async {
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (io.Platform.isAndroid || io.Platform.isIOS) {
       return await helper.transact(upiMethodChannel, transactionDetails);
     }
     throw UnsupportedError(

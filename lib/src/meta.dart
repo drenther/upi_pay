@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:universal_io/io.dart';
+import 'package:universal_io/io.dart' as io;
 import 'package:upi_pay/src/applications.dart';
 import 'package:flutter/material.dart';
 
@@ -34,9 +34,9 @@ class ApplicationMeta {
   /// On Android, it creates an [Image] widget from the byte-array of the logo.
   /// On iOS, it creates an [Image] widget from logo stored as part of assets.
   Image iconImage(double dimension) {
-    if (Platform.isAndroid) {
+    if (io.Platform.isAndroid) {
       return Image.memory(_icon, width: dimension, height: dimension);
-    } else if (Platform.isIOS) {
+    } else if (io.Platform.isIOS) {
       return Image.asset(
         'assets/apps/ios/${upiApplication.iosBundleId}.png',
         package: 'upi_pay',
@@ -52,7 +52,7 @@ class ApplicationMeta {
 
   /// Getter for [_priority]. Leads to [UnsupportedError] on iOS.
   int get priority {
-    if (Platform.isAndroid) {
+    if (io.Platform.isAndroid) {
       return _priority;
     }
     throw UnsupportedError('`priority` is not available on iOS');
@@ -60,7 +60,7 @@ class ApplicationMeta {
 
   /// Getter for [_preferredOrder]. Leads to [UnsupportedError] on iOS.
   int get preferredOrder {
-    if (Platform.isAndroid) {
+    if (io.Platform.isAndroid) {
       return _preferredOrder;
     }
     throw UnsupportedError('`preferredOrder` is not available on iOS');

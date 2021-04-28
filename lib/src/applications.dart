@@ -1,4 +1,4 @@
-import 'package:universal_io/io.dart';
+import 'package:universal_io/io.dart' as io;
 import 'package:flutter/cupertino.dart';
 
 /// Represents a UPI payment application.
@@ -31,7 +31,7 @@ class UpiApplication {
     @required this.appName,
     this.discoveryCustomScheme,
   }) {
-    if (Platform.isAndroid) {
+    if (io.Platform.isAndroid) {
       lookUpMap[this.androidPackageName] = this;
     } else {
       lookUpMap[this.iosBundleId] = this;
@@ -492,7 +492,7 @@ class UpiApplication {
 
   /// Returns the platform-specific package name.
   String toString() {
-    return Platform.isAndroid ? androidPackageName : iosBundleId;
+    return io.Platform.isAndroid ? androidPackageName : iosBundleId;
   }
 
   /// Returns app's name.

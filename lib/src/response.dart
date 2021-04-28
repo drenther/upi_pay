@@ -1,4 +1,4 @@
-import 'package:universal_io/io.dart';
+import 'package:universal_io/io.dart' as io;
 
 /// Represents status of executing a UPI transaction by launching a UPI app.
 enum UpiTransactionStatus {
@@ -103,7 +103,7 @@ class UpiTransactionResponse {
 
   /// Getter for [_txnId]. Leads to [UnsupportedError] on iOs.
   String get txnId {
-    if (Platform.isAndroid) {
+    if (io.Platform.isAndroid) {
       return _txnId;
     }
     throw UnsupportedError('The attribute txnId is not available on iOS');
@@ -111,7 +111,7 @@ class UpiTransactionResponse {
 
   /// Getter for [_responseCode]. Leads to [UnsupportedError] on iOs.
   String get responseCode {
-    if (Platform.isAndroid) {
+    if (io.Platform.isAndroid) {
       return _responseCode;
     }
     throw UnsupportedError(
@@ -120,7 +120,7 @@ class UpiTransactionResponse {
 
   /// Getter for [_approvalRefNo]. Leads to [UnsupportedError] on iOs.
   String get approvalRefNo {
-    if (Platform.isAndroid) {
+    if (io.Platform.isAndroid) {
       return _approvalRefNo;
     }
     throw UnsupportedError(
@@ -132,7 +132,7 @@ class UpiTransactionResponse {
 
   /// Getter for [_txnRef]. Leads to [UnsupportedError] on iOs.
   String get txnRef {
-    if (Platform.isAndroid) {
+    if (io.Platform.isAndroid) {
       return _txnRef;
     }
     throw UnsupportedError('The attribute txnRef is not available on iOS');
@@ -140,7 +140,7 @@ class UpiTransactionResponse {
 
   /// Getter for [_rawResponse]. Leads to [UnsupportedError] on iOs.
   String get rawResponse {
-    if (Platform.isAndroid) {
+    if (io.Platform.isAndroid) {
       return _rawResponse;
     }
     throw UnsupportedError('The attribute rawResponse is not available on iOS');
@@ -148,7 +148,7 @@ class UpiTransactionResponse {
 
   /// Getter for [_launchError]. Leads to [UnsupportedError] on Android.
   String get launchError {
-    if (Platform.isIOS) {
+    if (io.Platform.isIOS) {
       return _launchError;
     }
     throw UnsupportedError(

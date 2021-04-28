@@ -1,4 +1,4 @@
-import 'package:universal_io/io.dart';
+import 'package:universal_io/io.dart' as io;
 import 'package:flutter/services.dart';
 import 'package:upi_pay/src/transaction_details.dart';
 
@@ -12,7 +12,7 @@ class UpiMethodChannel {
 
   Future<String> initiateTransaction(
       TransactionDetails transactionDetails) async {
-    if (Platform.isAndroid) {
+    if (io.Platform.isAndroid) {
       return await _channel.invokeMethod<String>(
           'initiateTransaction', transactionDetails.toJson());
     }
@@ -21,7 +21,7 @@ class UpiMethodChannel {
   }
 
   Future<bool> launch(TransactionDetails transactionDetails) async {
-    if (Platform.isIOS) {
+    if (io.Platform.isIOS) {
       return await _channel
           .invokeMethod<bool>('launch', {'uri': transactionDetails.toString()});
     }
@@ -29,7 +29,7 @@ class UpiMethodChannel {
   }
 
   Future<List<Map<dynamic, dynamic>>> getInstalledUpiApps() async {
-    if (Platform.isAndroid) {
+    if (io.Platform.isAndroid) {
       return await _channel
           .invokeListMethod<Map<dynamic, dynamic>>('getInstalledUpiApps');
     }
@@ -38,7 +38,7 @@ class UpiMethodChannel {
   }
 
   Future<bool> canLaunch(String scheme) async {
-    if (Platform.isIOS) {
+    if (io.Platform.isIOS) {
       return await _channel
           .invokeMethod<bool>('canLaunch', {'uri': scheme + "://"});
     }

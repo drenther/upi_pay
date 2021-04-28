@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:universal_io/io.dart';
+import 'package:universal_io/io.dart' as io;
 import 'package:flutter/cupertino.dart';
 import 'package:upi_pay/src/applications.dart';
 import 'package:upi_pay/src/method_channel.dart';
@@ -8,9 +8,9 @@ import 'package:upi_pay/src/status.dart';
 import 'package:upi_pay/src/meta.dart';
 
 class UpiApplicationDiscovery implements _PlatformDiscoveryBase {
-  final discovery = Platform.isAndroid
+  final discovery = io.Platform.isAndroid
       ? _AndroidDiscovery()
-      : Platform.isIOS
+      : io.Platform.isIOS
           ? _IosDiscovery()
           : null;
   static final _singleton = UpiApplicationDiscovery._inner();
@@ -28,7 +28,7 @@ class UpiApplicationDiscovery implements _PlatformDiscoveryBase {
     UpiApplicationDiscoveryAppStatusType statusType:
         UpiApplicationDiscoveryAppStatusType.working,
   }) async {
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (io.Platform.isAndroid || io.Platform.isIOS) {
       return await discovery.discover(
         upiMethodChannel: upiMethodChannel,
         applicationStatusMap: applicationStatusMap,
