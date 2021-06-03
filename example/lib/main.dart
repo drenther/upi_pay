@@ -26,13 +26,13 @@ class Screen extends StatefulWidget {
 }
 
 class _ScreenState extends State<Screen> {
-  String _upiAddrError;
+  String? _upiAddrError;
 
   final _upiAddressController = TextEditingController();
   final _amountController = TextEditingController();
 
   bool _isUpiEditable = false;
-  List<ApplicationMeta> _apps;
+  List<ApplicationMeta>? _apps;
 
   @override
   void initState() {
@@ -96,7 +96,7 @@ class _ScreenState extends State<Screen> {
       child: ListView(
         children: <Widget>[
           _vpa(),
-          if(_upiAddrError != null) _vpaError(),
+          if (_upiAddrError != null) _vpaError(),
           _amount(),
           if (Platform.isIOS) _submitButton(),
           Platform.isAndroid ? _androidApps() : _iosApps(),
@@ -143,7 +143,7 @@ class _ScreenState extends State<Screen> {
     return Container(
       margin: EdgeInsets.only(top: 4, left: 12),
       child: Text(
-        _upiAddrError,
+        _upiAddrError!,
         style: TextStyle(color: Colors.red),
       ),
     );
@@ -184,11 +184,16 @@ class _ScreenState extends State<Screen> {
         children: <Widget>[
           Expanded(
             child: MaterialButton(
-              onPressed: () async => await _onTap(_apps[0]),
-              child: Text('Initiate Transaction', style: Theme.of(context).textTheme.button.copyWith(color: Colors.white)),
+              onPressed: () async => await _onTap(_apps![0]),
+              child: Text('Initiate Transaction',
+                  style: Theme.of(context)
+                      .textTheme
+                      .button!
+                      .copyWith(color: Colors.white)),
               color: Theme.of(context).accentColor,
               height: 48,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6)),
             ),
           ),
         ],
@@ -209,7 +214,7 @@ class _ScreenState extends State<Screen> {
               style: Theme.of(context).textTheme.bodyText1,
             ),
           ),
-          if(_apps != null) _appsGrid(_apps.map((e) => e).toList()),
+          if (_apps != null) _appsGrid(_apps!.map((e) => e).toList()),
         ],
       ),
     );
@@ -225,7 +230,7 @@ class _ScreenState extends State<Screen> {
             margin: EdgeInsets.only(bottom: 24),
             child: Text(
               'One of these will be invoked automatically by your phone to '
-                  'make a payment',
+              'make a payment',
               style: Theme.of(context).textTheme.bodyText2,
             ),
           ),
@@ -244,27 +249,29 @@ class _ScreenState extends State<Screen> {
               style: Theme.of(context).textTheme.bodyText1,
             ),
           ),
-          if(_apps != null) _nonDiscoverableAppsGrid(),
+          if (_apps != null) _nonDiscoverableAppsGrid(),
         ],
       ),
     );
   }
 
   GridView _discoverableAppsGrid() {
-    List<ApplicationMeta> metaList = _apps
-        .map((e) => e.upiApplication.discoveryCustomScheme != null ? e : null)
-        .where((it) => it != null)
-        .toList();
+    List<ApplicationMeta> metaList = [];
+    _apps!.forEach((e) {
+      if (e.upiApplication.discoveryCustomScheme != null) {
+        metaList.add(e);
+      }
+    });
     return _appsGrid(metaList);
   }
 
   GridView _nonDiscoverableAppsGrid() {
-    List<ApplicationMeta> metaList = _apps
-        .map((e) => e.upiApplication.discoveryCustomScheme == null
-        ? e
-        : null)
-        .where((it) => it != null)
-        .toList();
+    List<ApplicationMeta> metaList = [];
+    _apps!.forEach((e) {
+      if (e.upiApplication.discoveryCustomScheme == null) {
+        metaList.add(e);
+      }
+    });
     return _appsGrid(metaList);
   }
 
@@ -310,7 +317,7 @@ class _ScreenState extends State<Screen> {
   }
 }
 
-String _validateUpiAddress(String value) {
+String? _validateUpiAddress(String value) {
   if (value.isEmpty) {
     return 'UPI VPA is required.';
   }

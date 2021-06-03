@@ -10,7 +10,7 @@ class UpiMethodChannel {
   }
   UpiMethodChannel._inner();
 
-  Future<String> initiateTransaction(
+  Future<String?> initiateTransaction(
       TransactionDetails transactionDetails) async {
     if (io.Platform.isAndroid) {
       return await _channel.invokeMethod<String>(
@@ -20,7 +20,7 @@ class UpiMethodChannel {
         'The `initiateTransaction` call is supported only on Android');
   }
 
-  Future<bool> launch(TransactionDetails transactionDetails) async {
+  Future<bool?> launch(TransactionDetails transactionDetails) async {
     if (io.Platform.isIOS) {
       return await _channel
           .invokeMethod<bool>('launch', {'uri': transactionDetails.toString()});
@@ -28,7 +28,7 @@ class UpiMethodChannel {
     throw UnsupportedError('The `launch` call is supported only on iOS');
   }
 
-  Future<List<Map<dynamic, dynamic>>> getInstalledUpiApps() async {
+  Future<List<Map<dynamic, dynamic>>?> getInstalledUpiApps() async {
     if (io.Platform.isAndroid) {
       return await _channel
           .invokeListMethod<Map<dynamic, dynamic>>('getInstalledUpiApps');
@@ -37,7 +37,7 @@ class UpiMethodChannel {
         'on Android');
   }
 
-  Future<bool> canLaunch(String scheme) async {
+  Future<bool?> canLaunch(String scheme) async {
     if (io.Platform.isIOS) {
       return await _channel
           .invokeMethod<bool>('canLaunch', {'uri': scheme + "://"});

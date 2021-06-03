@@ -1,5 +1,4 @@
 import 'package:decimal/decimal.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:upi_pay/src/applications.dart';
 import 'package:upi_pay/src/exceptions.dart';
 
@@ -13,26 +12,21 @@ class TransactionDetails {
   final String transactionRef;
   final String currency;
   final Decimal amount;
-  final String url;
+  final String? url;
   final String merchantCode;
-  final String transactionNote;
+  final String? transactionNote;
 
   TransactionDetails({
-    @required this.upiApplication,
-    @required this.payeeAddress,
-    @required this.payeeName,
-    @required this.transactionRef,
+    required this.upiApplication,
+    required this.payeeAddress,
+    required this.payeeName,
+    required this.transactionRef,
     this.currency: TransactionDetails._currency,
-    @required String amount,
+    required String amount,
     this.url,
     this.merchantCode: '',
     this.transactionNote: 'UPI Transaction',
   }) : amount = Decimal.parse(amount) {
-    assert(upiApplication != null);
-    assert(payeeAddress != null);
-    assert(payeeName != null);
-    assert(transactionRef != null);
-    assert(amount != null);
     if (!_checkIfUpiAddressIsValid(payeeAddress)) {
       throw InvalidUpiAddressException();
     }
@@ -69,13 +63,13 @@ class TransactionDetails {
     String uri = 'upi://pay?pa=$payeeAddress'
         '&pn=${Uri.encodeComponent(payeeName)}'
         '&tr=$transactionRef'
-        '&tn=${Uri.encodeComponent(transactionNote)}'
+        '&tn=${Uri.encodeComponent(transactionNote!)}'
         '&am=${amount.toString()}'
         '&cu=$currency';
-    if (url != null && url.isNotEmpty) {
-      uri += '&url=${Uri.encodeComponent(url)}';
+    if (url != null && url!.isNotEmpty) {
+      uri += '&url=${Uri.encodeComponent(url!)}';
     }
-    if (merchantCode != null && merchantCode.isNotEmpty) {
+    if (merchantCode.isNotEmpty) {
       uri += '&mc=${Uri.encodeComponent(merchantCode)}';
     }
     return uri;
