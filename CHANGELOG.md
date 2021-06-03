@@ -1,3 +1,9 @@
+## 0.3.0
+
+- Support for iOS
+- Working status of various UPI payment applications included
+- User can filter the apps discovery output against working status data by passing parameters. API remains backward compatible in syntax and semantics of providing properly working applications only in case no parameters are provided.
+
 ## 0.1.0
 
 - Initial release
