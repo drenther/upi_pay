@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:universal_io/io.dart' as io;
-import 'package:flutter/cupertino.dart';
 import 'package:upi_pay/src/applications.dart';
 import 'package:upi_pay/src/method_channel.dart';
 import 'package:upi_pay/src/status.dart';
@@ -21,15 +20,15 @@ class UpiApplicationDiscovery implements _PlatformDiscoveryBase {
 
   @override
   Future<List<ApplicationMeta>> discover({
-    @required UpiMethodChannel upiMethodChannel,
-    @required Map<UpiApplication, UpiApplicationStatus> applicationStatusMap,
+    required UpiMethodChannel upiMethodChannel,
+    required Map<UpiApplication, UpiApplicationStatus> applicationStatusMap,
     UpiApplicationDiscoveryAppPaymentType paymentType:
         UpiApplicationDiscoveryAppPaymentType.nonMerchant,
     UpiApplicationDiscoveryAppStatusType statusType:
         UpiApplicationDiscoveryAppStatusType.working,
   }) async {
     if (io.Platform.isAndroid || io.Platform.isIOS) {
-      return await discovery.discover(
+      return await discovery!.discover(
         upiMethodChannel: upiMethodChannel,
         applicationStatusMap: applicationStatusMap,
         paymentType: paymentType,
@@ -49,39 +48,38 @@ class _AndroidDiscovery implements _PlatformDiscoveryBase {
 
   @override
   Future<List<ApplicationMeta>> discover({
-    @required UpiMethodChannel upiMethodChannel,
-    @required Map<UpiApplication, UpiApplicationStatus> applicationStatusMap,
+    required UpiMethodChannel upiMethodChannel,
+    required Map<UpiApplication, UpiApplicationStatus> applicationStatusMap,
     UpiApplicationDiscoveryAppPaymentType paymentType:
         UpiApplicationDiscoveryAppPaymentType.nonMerchant,
     UpiApplicationDiscoveryAppStatusType statusType:
         UpiApplicationDiscoveryAppStatusType.working,
   }) async {
     final appsList = await upiMethodChannel.getInstalledUpiApps();
-    return appsList
-        .map((app) {
-          final packageName = _castToString(app['packageName']);
-          final androidStatus = _getStatus(packageName, applicationStatusMap);
-          if (androidStatus == null) {
-            return null;
-          }
-          if (_canUseApp(statusType, androidStatus)) {
-            final icon = _castToString(app['icon']);
-            final priority = _castToInt(app['priority']);
-            final preferredOrder = _castToInt(app['preferredOrder']);
-            return ApplicationMeta.android(
-              UpiApplication.lookUpMap[packageName],
-              base64.decode(icon),
-              priority,
-              preferredOrder,
-            );
-          }
-          return null;
-        })
-        .where((it) => it != null)
-        .toList();
+    if (appsList == null) return [];
+    final List<ApplicationMeta> retList = [];
+    appsList.forEach((app) {
+      final packageName = _castToString(app['packageName']);
+      final androidStatus = _getStatus(packageName, applicationStatusMap);
+      if (androidStatus == null) {
+        return null;
+      }
+      if (_canUseApp(statusType, androidStatus)) {
+        final icon = _castToString(app['icon']);
+        final priority = _castToInt(app['priority']);
+        final preferredOrder = _castToInt(app['preferredOrder']);
+        retList.add(ApplicationMeta.android(
+          UpiApplication.lookUpMap[packageName]!,
+          base64.decode(icon),
+          priority,
+          preferredOrder,
+        ));
+      }
+    });
+    return retList;
   }
 
-  UpiApplicationAndroidStatus _getStatus(String packageName,
+  UpiApplicationAndroidStatus? _getStatus(String packageName,
       Map<UpiApplication, UpiApplicationStatus> applicationStatusMap) {
     if (!UpiApplication.lookUpMap.containsKey(packageName)) {
       return null;
@@ -90,10 +88,7 @@ class _AndroidDiscovery implements _PlatformDiscoveryBase {
     if (!applicationStatusMap.containsKey(upiApp)) {
       return null;
     }
-    final status = applicationStatusMap[upiApp];
-    if (status.androidStatus == null) {
-      return null;
-    }
+    final status = applicationStatusMap[upiApp]!;
     return status.androidStatus;
   }
 
@@ -106,14 +101,11 @@ class _AndroidDiscovery implements _PlatformDiscoveryBase {
           return androidStatus.nonMerchantPaymentStatus ==
                   NonMerchantPaymentAndroidStatus.success &&
               !androidStatus.warnsUnverifiedSourceForNonMerchant;
-          break;
         case UpiApplicationDiscoveryAppStatusType.workingWithWarnings:
           return androidStatus.nonMerchantPaymentStatus ==
               NonMerchantPaymentAndroidStatus.success;
-          break;
         case UpiApplicationDiscoveryAppStatusType.all:
           return true;
-          break;
       }
     }
     return false;
@@ -129,8 +121,8 @@ class _IosDiscovery implements _PlatformDiscoveryBase {
 
   @override
   Future<List<ApplicationMeta>> discover({
-    @required UpiMethodChannel upiMethodChannel,
-    @required Map<UpiApplication, UpiApplicationStatus> applicationStatusMap,
+    required UpiMethodChannel upiMethodChannel,
+    required Map<UpiApplication, UpiApplicationStatus> applicationStatusMap,
     UpiApplicationDiscoveryAppPaymentType paymentType:
         UpiApplicationDiscoveryAppPaymentType.nonMerchant,
     UpiApplicationDiscoveryAppStatusType statusType:
@@ -139,10 +131,11 @@ class _IosDiscovery implements _PlatformDiscoveryBase {
     Map<String, UpiApplication> discoveryMap = {};
     List<UpiApplication> discovered = [];
     applicationStatusMap.forEach((app, status) {
-      final iosStatus = _getStatus(app.iosBundleId, applicationStatusMap);
+      if (app.iosBundleId == null) return;
+      final iosStatus = _getStatus(app.iosBundleId!, applicationStatusMap);
       if (iosStatus != null && _canUseApp(statusType, iosStatus)) {
         if (app.discoveryCustomScheme != null) {
-          discoveryMap[app.discoveryCustomScheme] = app;
+          discoveryMap[app.discoveryCustomScheme!] = app;
         } else {
           discovered.add(app);
         }
@@ -152,10 +145,10 @@ class _IosDiscovery implements _PlatformDiscoveryBase {
     for (int idx = 0; idx < discoveryMap.length; ++idx) {
       final scheme = keys[idx];
       try {
-        final bool result = await upiMethodChannel.canLaunch(scheme);
+        final bool? result = await upiMethodChannel.canLaunch(scheme);
         // print('$scheme, launch-able: $result');
-        if (result) {
-          discovered.add(discoveryMap[scheme]);
+        if (result == true) {
+          discovered.add(discoveryMap[scheme]!);
         }
       } catch (error, stack) {
         // print('$scheme canLaunch error');
@@ -163,22 +156,19 @@ class _IosDiscovery implements _PlatformDiscoveryBase {
         print(stack);
       }
     }
-    return discovered
-        .map((app) => ApplicationMeta.ios(app))
-        .where((it) => it != null)
-        .toList();
+    return discovered.map((app) => ApplicationMeta.ios(app)).toList();
   }
 
-  UpiApplicationIosStatus _getStatus(String packageName,
+  UpiApplicationIosStatus? _getStatus(String packageName,
       Map<UpiApplication, UpiApplicationStatus> applicationStatusMap) {
     if (!UpiApplication.lookUpMap.containsKey(packageName)) {
       return null;
     }
-    final upiApp = UpiApplication.lookUpMap[packageName];
+    final upiApp = UpiApplication.lookUpMap[packageName]!;
     if (!applicationStatusMap.containsKey(upiApp)) {
       return null;
     }
-    final status = applicationStatusMap[upiApp];
+    final status = applicationStatusMap[upiApp]!;
     if (status.iosStatus == null) {
       return null;
     }
@@ -192,16 +182,13 @@ class _IosDiscovery implements _PlatformDiscoveryBase {
       switch (statusType) {
         case UpiApplicationDiscoveryAppStatusType.working:
           return iosStatus.nonMerchantPaymentStatus ==
-              NonMerchantPaymentIosStatus.success &&
+                  NonMerchantPaymentIosStatus.success &&
               !iosStatus.warnsUnverifiedSourceForNonMerchant;
-          break;
         case UpiApplicationDiscoveryAppStatusType.workingWithWarnings:
           return iosStatus.nonMerchantPaymentStatus ==
               NonMerchantPaymentIosStatus.success;
-          break;
         case UpiApplicationDiscoveryAppStatusType.all:
           return true;
-          break;
       }
     }
     return false;
@@ -210,8 +197,8 @@ class _IosDiscovery implements _PlatformDiscoveryBase {
 
 abstract class _PlatformDiscoveryBase {
   Future<List<ApplicationMeta>> discover({
-    @required UpiMethodChannel upiMethodChannel,
-    @required Map<UpiApplication, UpiApplicationStatus> applicationStatusMap,
+    required UpiMethodChannel upiMethodChannel,
+    required Map<UpiApplication, UpiApplicationStatus> applicationStatusMap,
     UpiApplicationDiscoveryAppPaymentType paymentType:
         UpiApplicationDiscoveryAppPaymentType.nonMerchant,
     UpiApplicationDiscoveryAppStatusType statusType:
@@ -242,9 +229,11 @@ enum UpiApplicationDiscoveryAppPaymentType {
   /// the package finds packages for which such payment works. Currently, it's
   /// the only type accepted.
   nonMerchant,
+
   /// Merchant payment type. Currently not accepted. Will represent merchant
   /// payment type once they are supported.
   merchant,
+
   /// Both individual-to-individual and merchant payment types. Not accepted
   /// currently.
   both,
@@ -258,6 +247,7 @@ enum UpiApplicationDiscoveryAppStatusType {
   /// Indicates that user wants UPI apps with any working status (they must be
   /// discoverable, though)
   all,
+
   /// Indicates that user wants UPI apps that complete the UPI payment and may
   /// or may not involve the "unverified source" warning. Currently, only
   /// individual-to-individual payments are implemented, and this status type
@@ -265,6 +255,7 @@ enum UpiApplicationDiscoveryAppStatusType {
   /// process and take confirmation from user before proceeding for this type
   /// of payments. For merchant payments, this type may become irrelevant.
   workingWithWarnings,
+
   /// Indicates that user wants UPI apps that complete the UPI payment without
   /// the "unverified source" warning
   working,

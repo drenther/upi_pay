@@ -1,5 +1,4 @@
 import 'package:universal_io/io.dart' as io;
-import 'package:flutter/cupertino.dart';
 
 /// Represents a UPI payment application.
 ///
@@ -12,7 +11,7 @@ class UpiApplication {
 
   /// Value of `CFBundleIdentifier` property in `Info.plist` of the iOS version
   /// of a UPI app. Serves as the identifier on iOS.
-  final String iosBundleId;
+  final String? iosBundleId;
 
   /// Friendly and typically a shorter version of a UPI app's name.
   final String appName;
@@ -23,18 +22,18 @@ class UpiApplication {
   /// UPI app without ambiguity, we need any other unique custom scheme that the
   /// app implements. Any such unique custom scheme, if available, is stored in
   /// this attribute to be used for discovering this app.
-  final String discoveryCustomScheme;
+  final String? discoveryCustomScheme;
 
   UpiApplication({
-    @required this.androidPackageName,
+    required this.androidPackageName,
     this.iosBundleId,
-    @required this.appName,
+    required this.appName,
     this.discoveryCustomScheme,
   }) {
     if (io.Platform.isAndroid) {
       lookUpMap[this.androidPackageName] = this;
-    } else {
-      lookUpMap[this.iosBundleId] = this;
+    } else if (this.iosBundleId != null) {
+      lookUpMap[this.iosBundleId!] = this;
     }
   }
 
@@ -45,6 +44,7 @@ class UpiApplication {
     appName: 'Google Pay',
     discoveryCustomScheme: 'gpay',
   );
+
   /// PhonePe
   static final phonePe = UpiApplication(
     androidPackageName: 'com.phonepe.app',
@@ -52,6 +52,7 @@ class UpiApplication {
     appName: 'PhonePe',
     discoveryCustomScheme: 'phonepe',
   );
+
   /// Paytm
   static final paytm = UpiApplication(
     androidPackageName: 'net.one97.paytm',
@@ -59,12 +60,14 @@ class UpiApplication {
     appName: 'Paytm',
     discoveryCustomScheme: 'paytm',
   );
+
   /// BHIM SBI Pay (State Bank of India's BHIM UPI app)
   static final sbiPay = UpiApplication(
     androidPackageName: 'com.sbi.upi',
     iosBundleId: 'com.sbi.upi',
     appName: 'SBI Pay',
   );
+
   /// iMobile by ICICI
   static final iMobile = UpiApplication(
     androidPackageName: 'com.csam.icici.bank.imobile',
@@ -72,6 +75,7 @@ class UpiApplication {
     appName: 'iMobile',
     discoveryCustomScheme: 'imobileapp',
   );
+
   /// BHIM from NPCI
   static final bhim = UpiApplication(
     androidPackageName: 'in.org.npci.upiapp',
@@ -79,11 +83,13 @@ class UpiApplication {
     appName: 'BHIM',
     discoveryCustomScheme: 'BHIM',
   );
+
   /// MiPay from Xiomi
   static final miPay = UpiApplication(
     androidPackageName: 'com.mipay.in.wallet',
     appName: 'Mi Pay',
   );
+
   /// Amazon (amazonPay signifies that the package uses the payment module)
   static final amazonPay = UpiApplication(
     androidPackageName: 'in.amazon.mShop.android.shopping',
@@ -91,6 +97,7 @@ class UpiApplication {
     appName: 'Amazon Pay',
     discoveryCustomScheme: 'com.amazon.mobile.shopping',
   );
+
   /// Truecaller
   static final trueCaller = UpiApplication(
     androidPackageName: 'com.truecaller',
@@ -98,6 +105,7 @@ class UpiApplication {
     appName: 'Truecaller',
     discoveryCustomScheme: 'truecaller',
   );
+
   /// Airtel Thanks
   static final airtel = UpiApplication(
     androidPackageName: 'com.myairtelapp',
@@ -105,18 +113,21 @@ class UpiApplication {
     appName: 'Airtel',
     discoveryCustomScheme: 'myairtel',
   );
+
   /// BHIM Axis Pay
   static final axisPay = UpiApplication(
     androidPackageName: 'com.upi.axispay',
     iosBundleId: 'comaxisbank.axispay',
     appName: 'Axis Pay',
   );
+
   /// Allbank (Allahabad Bank's BHIM UPI app)
   static final bhimAllBank = UpiApplication(
     androidPackageName: 'com.lcode.allahabadupi',
     iosBundleId: 'com.alb.mobile.banking',
     appName: 'ALLBANK',
   );
+
   /// BHIM Andhra UPI (Andhra Bank's BHIM UPI app)
   static final bhimAndhraUpi = UpiApplication(
     androidPackageName: 'com.olive.andhra.upi',
@@ -129,6 +140,7 @@ class UpiApplication {
     iosBundleId: 'com.ausmallfinancebank.aupay.bhimupi',
     appName: 'AUPay',
   );
+
   /// BHIM Bandhan UPI (Bandhan Bank's BHIM UPI app)
   static final bhimBandhanUpi = UpiApplication(
     androidPackageName: 'com.fisglobal.bandhanupi.app',
@@ -136,18 +148,21 @@ class UpiApplication {
     appName: 'Bandhan UPI',
     discoveryCustomScheme: 'Bandhan',
   );
+
   /// BHIM BOB Pay (Bank of Baroda's BHIM UPI app)
   static final bhimBobPay = UpiApplication(
     androidPackageName: 'com.bankofbaroda.upi',
     iosBundleId: 'com.bankofbaroda.upi',
     appName: 'BOB Pay',
   );
+
   /// BHIM BOI UPI (Bank of India's BHIM UPI app)
   static final bhimBoiUpi = UpiApplication(
     androidPackageName: 'com.infra.boiupi',
     iosBundleId: 'com.infrasoftech.boiupi',
     appName: 'BOI UPI',
   );
+
   /// BHIM Cent UPI (Central Bank's BHIM UPI app)
   static final bhimCentUpi = UpiApplication(
     androidPackageName: 'com.infrasofttech.centralbankupi',
@@ -155,82 +170,97 @@ class UpiApplication {
     appName: 'Cent UPI',
     discoveryCustomScheme: 'CentUPI',
   );
+
   /// BHIM CORP UPI (Corporation Bank's BHIM UPI app)
   static final bhimCorpUpi = UpiApplication(
     androidPackageName: 'com.lcode.corpupi',
     appName: 'CORP UPI',
   );
+
   /// BHIM CSB UPI (CSB's, formerly Catholic Syrian Bank, BHIM UPI app)
   static final bhimCsbUpi = UpiApplication(
     androidPackageName: 'com.lcode.csbupi',
     appName: 'CSB UPI',
   );
+
   /// BHIM CUB UPI (City Union Bank's BHIM UPI app)
   static final bhimCubUpi = UpiApplication(
     androidPackageName: 'com.cub.wallet.gui',
     appName: 'CUB UPI',
   );
+
   /// BHIM DCB UPI (DCB bank's BHIM UPI app)
   static final bhimDcbUpi = UpiApplication(
     androidPackageName: 'com.olive.dcb.upi',
     iosBundleId: 'com.upi.dcb',
     appName: 'DCB UPI',
   );
+
   /// BHIM DLB UPI (Dhanlaxmi Bank's BHIM UPI app)
   static final bhimDlbUpi = UpiApplication(
     androidPackageName: 'com.lcode.dlbupi',
     iosBundleId: 'com.lcode.dlbupi',
     appName: 'DLB UPI',
   );
+
   /// BHIM Equitas UPI (Equitas Small Finance Bank's BHIM UPI app)
   static final bhimEquitasUpi = UpiApplication(
     androidPackageName: 'com.equitasbank.upi',
     appName: 'Equitas UPI',
   );
+
   /// BHIM IDFC First Bank UPI
   static final bhimIdfcFirstBankUpi = UpiApplication(
     androidPackageName: 'com.fss.idfcpsp',
     iosBundleId: 'com.idfcbank.IDFC-UPI',
     appName: 'IDFC First Bank UPI',
   );
+
   /// BHIM Indian Bank UPI
   static final bhimIndianBankUpi = UpiApplication(
     androidPackageName: 'com.infrasofttech.indianbankupi',
     iosBundleId: 'com.infrasofttech.bhimindianbankupi',
     appName: 'Indian Bank UPI',
   );
+
   /// BHIM IndusPay (IndusInd bank's BHIM UPI app)
   static final bhimIndusPayUpi = UpiApplication(
     androidPackageName: 'com.mgs.induspsp',
     appName: 'IndusPay UPI',
   );
+
   /// BHIM IOB UPI (Indian Overseas Bank's BHIM UPI app)
   static final bhimIobUpi = UpiApplication(
     androidPackageName: 'com.euronet.iobupi',
     appName: 'IOB UPI',
   );
+
   /// BHIM JetPay (Janata Sahakari Bank's BHIM UPI app)
   static final bhimJetPay = UpiApplication(
     androidPackageName: 'com.finacus.jetpay',
     appName: 'JetPay',
   );
+
   /// BHIM J&K Bank UPI (Jammu & Kashmir Bank's BHIM UPI app)
   static final bhimJkBankUpi = UpiApplication(
     androidPackageName: 'com.fss.jnkpsp',
     iosBundleId: 'com.jkbank.bhimjkbankupi',
     appName: 'JK Bank UPI',
   );
+
   /// BHIM KBL UPI (Karnataka Bank's BHIM UPI app)
   static final bhimKblUpi = UpiApplication(
     androidPackageName: 'com.lcode.smartz',
     appName: 'KBL UPI',
   );
+
   /// BHIM KVB Upay (Karoor Vysya Bank's BHIM UPI app)
   static final bhimKvbUpay = UpiApplication(
     androidPackageName: 'com.mycompany.kvb',
     iosBundleId: 'kvb.app.upiapp',
     appName: 'KVB Upay',
   );
+
   /// BHIM LOTZA UPI (Federal Bank's LOTZA BHIM UPI app)
   static final bhimLotzaUpi = UpiApplication(
     androidPackageName: 'com.upi.federalbank.org.lotza',
@@ -238,44 +268,52 @@ class UpiApplication {
     appName: 'LOTZA UPI',
     discoveryCustomScheme: 'lotza',
   );
+
   /// BHIM LVB Upaay (Laxmi Vilas Bank's BHIM UPI app)
   static final bhimLvbUpaay = UpiApplication(
     androidPackageName: 'com.lvbank.upaay',
     iosBundleId: 'com.lvb.upaay',
     appName: 'LVB Upaay',
   );
+
   /// BHIM Oriental Pay (Oriental Bank of Commerce's BHIM UPI app)
   static final bhimOrientalPay = UpiApplication(
     androidPackageName: 'com.mgs.obcbank',
     appName: 'Oriental Pay',
   );
+
   /// BHIM Paywiz V2 (IDBI Bank's BHIM UPI app)
   static final bhimPaywizV2 = UpiApplication(
     androidPackageName: 'com.idbibank.paywiz',
     appName: 'Paywiz V2',
   );
+
   /// BHIM PNB (Punjab National Bank's BHIM UPI app)
   static final bhimPnb = UpiApplication(
     androidPackageName: 'com.fss.pnbpsp',
     appName: 'PNB',
   );
+
   /// BHIM PSB (Punjab & Sindh Bank's BHIM UPI app)
   static final bhimPsb = UpiApplication(
     androidPackageName: 'com.mobileware.upipsb',
     appName: 'PSB',
   );
+
   /// BHIM RBL Pay (RBL Bank's BHIM UPI app)
   static final bhimRblPay = UpiApplication(
     androidPackageName: 'com.rblbank.upi',
     iosBundleId: 'com.rblpay.upi',
     appName: 'RBL Pay',
   );
+
   /// BHIM@SyndUPI (Syndicate Bank's BHIM UPI app)
   static final bhimSyndUpi = UpiApplication(
     androidPackageName: 'com.fisglobal.syndicateupi.app',
     iosBundleId: 'com.syndicate.syndupi',
     appName: 'SyndUPI',
   );
+
   /// BHIM UCO UPI (UCO Bank's BHIM UPI app)
   static final bhimUcoUpi = UpiApplication(
     androidPackageName: 'com.lcode.ucoupi',
@@ -283,6 +321,7 @@ class UpiApplication {
     appName: 'UCO UPI',
     discoveryCustomScheme: 'ucoupi',
   );
+
   /// BHIM United UPI Pay (United Bank of India's BHIM UPI app)
   static final bhimUnitedUpiPay = UpiApplication(
     androidPackageName: 'com.fss.unbipsp',
@@ -290,30 +329,35 @@ class UpiApplication {
     appName: 'United UPI Pay',
     discoveryCustomScheme: 'upibillpay',
   );
+
   /// BHIM Vijaya UPI (Vijaya Bank's BHIM UPI app)
   static final bhimVijayaUpi = UpiApplication(
     androidPackageName: 'com.fss.vijayapsp',
     iosBundleId: 'com.vijayabank.UPI',
     appName: 'Vijaya UPI',
   );
+
   /// BHIM YesPay (Yes Bank's BHIM UPI app)
   static final bhimYesPay = UpiApplication(
     androidPackageName: 'com.YesBank',
     iosBundleId: 'com.YesPay',
     appName: 'Yes Pay',
   );
+
   /// BPay (Fino Payments Bank's BPay BHIM UPI app)
   static final bPay = UpiApplication(
     androidPackageName: 'com.finopaytech.bpayfino',
     iosBundleId: 'com.finopaytech.bpayfino',
     appName: 'BPay',
   );
+
   /// Bullet BHIM UPI payments app
   static final bullet = UpiApplication(
     androidPackageName: 'money.bullet',
     iosBundleId: 'money.bullet',
     appName: 'Bullet',
   );
+
   /// Canara Bank's app for account holders that also includes BHIM UPI
   /// transactions for non-customers
   static final canaraBank = UpiApplication(
@@ -322,12 +366,14 @@ class UpiApplication {
     appName: 'Canara Bank App',
     discoveryCustomScheme: 'CanaraMobility',
   );
+
   /// Cointab BHIM UPI payments app
   static final cointab = UpiApplication(
     androidPackageName: 'in.cointab.app',
     iosBundleId: 'in.cointab.app',
     appName: 'Cointab',
   );
+
   /// CRED
   static final cred = UpiApplication(
     androidPackageName: 'com.dreamplug.androidapp',
@@ -335,6 +381,7 @@ class UpiApplication {
     appName: 'CRED',
     discoveryCustomScheme: 'cred',
   );
+
   /// City Union Bank's app for account holders that also includes BHIM UPI
   /// transactions for non-customers
   static final cubMBankPlus = UpiApplication(
@@ -342,11 +389,13 @@ class UpiApplication {
     iosBundleId: 'com.cub.mbank',
     appName: 'CUB mBank Plus',
   );
+
   /// DakPay (Indian Post Payments Bank's BHIM UPI app)
   static final dakPay = UpiApplication(
     androidPackageName: 'com.fss.ippbpsp',
     appName: 'DakPay',
   );
+
   /// Digibank's app for account holders that also includes BHIM UPI
   /// transactions for non-customers
   static final digibankDbs = UpiApplication(
@@ -355,6 +404,7 @@ class UpiApplication {
     appName: 'Digibank',
     discoveryCustomScheme: 'dbin',
   );
+
   /// FamPay BHIM UPI app
   static final famPay = UpiApplication(
     androidPackageName: 'com.fampay.in',
@@ -362,6 +412,7 @@ class UpiApplication {
     appName: 'FamPay',
     discoveryCustomScheme: 'in.fampay.app',
   );
+
   /// Freecharge
   static final freecharge = UpiApplication(
     androidPackageName: 'com.freecharge.android',
@@ -369,6 +420,7 @@ class UpiApplication {
     appName: 'Freecharge',
     discoveryCustomScheme: 'freecharge',
   );
+
   /// HDFC's app for account holders that also includes BHIM UPI transactions
   /// for non-customers
   static final hdfcMobileBanking = UpiApplication(
@@ -377,17 +429,20 @@ class UpiApplication {
     appName: 'HDFC',
     discoveryCustomScheme: 'hdfcnewbb',
   );
+
   /// HSBC SimplyPay (HSBC's BHIM UPI app)
   static final hsbcSimplyPay = UpiApplication(
     androidPackageName: 'com.mgs.hsbcupi',
     iosBundleId: 'com.hsbc.simplypay',
     appName: 'HSBC Simply Pay',
   );
+
   /// KhaaliJeb
   static final khaaliJeb = UpiApplication(
     androidPackageName: 'com.khaalijeb.inkdrops',
     appName: 'KhaaliJeb',
   );
+
   /// LazyPay
   static final lazyPay = UpiApplication(
     androidPackageName: 'com.citrus.citruspay',
@@ -395,11 +450,13 @@ class UpiApplication {
     appName: 'LazyPay',
     discoveryCustomScheme: 'www.citruspay.com',
   );
+
   /// MahaUPI (Maharashtra Bank's BHIM UPI app)
   static final mahaUpi = UpiApplication(
     androidPackageName: 'com.infrasofttech.mahaupi',
     appName: 'MahaUPI',
   );
+
   /// Mobikwik
   static final mobikwik = UpiApplication(
     androidPackageName: 'com.mobikwik_new',
@@ -407,11 +464,13 @@ class UpiApplication {
     appName: 'Mobikwik',
     discoveryCustomScheme: 'mobikwik',
   );
+
   /// MudraPay payments app
   static final mudraPay = UpiApplication(
     androidPackageName: 'com.microlucid.mudrapay.android',
     appName: 'MudraPay',
   );
+
   /// myJio app from JIO that includes UPI payments
   static final myJio = UpiApplication(
     androidPackageName: 'com.jio.myjio',
@@ -419,11 +478,13 @@ class UpiApplication {
     appName: 'MyJio',
     discoveryCustomScheme: 'myJio',
   );
+
   /// OmegaPay BHIM UPI app from Omegaon
   static final omegaPay = UpiApplication(
     androidPackageName: 'com.omegaon_internet_pvt_ltd',
     appName: 'Omega Pay',
   );
+
   /// PayZapp BHIM UPI app from HDFC
   static final payZapp = UpiApplication(
     androidPackageName: 'com.enstage.wibmo.hdfc',
@@ -431,6 +492,7 @@ class UpiApplication {
     appName: 'PayZapp',
     // discoveryCustomScheme: 'payzapp',
   );
+
   /// RBL's app for account holders that also includes BHIM UPI transactions for
   /// non-customers
   static final rblMoBank = UpiApplication(
@@ -439,11 +501,13 @@ class UpiApplication {
     appName: 'RBL MoBank',
     discoveryCustomScheme: 'com.rbl.rblimplicitjourney',
   );
+
   /// Realme PaySa BHIM UPI app
   static final realmePaySa = UpiApplication(
     androidPackageName: 'com.realmepay.payments',
     appName: 'Realme PaySa',
   );
+
   /// SIB Mirror+ (South Indian Bank's app for customers that also includes
   /// BHIM UPI transactions for non-customers)
   static final sibMirrorPlus = UpiApplication(
@@ -451,16 +515,19 @@ class UpiApplication {
     iosBundleId: 'com.sib.sibmirrorplus',
     appName: 'SIB Mirror+',
   );
+
   /// Tranzapp (TJSB Sahakari Bank's BHIM UPI app)
   static final tranzappBhimUpi = UpiApplication(
     androidPackageName: 'com.finacus.tranzapp',
     appName: 'Tranzapp',
   );
+
   /// Ultracash
   static final ultraCash = UpiApplication(
     androidPackageName: 'com.ultracash.payment.customer',
     appName: 'UltraCash',
   );
+
   /// uMobile (Union Bank of India's app for customers that also includes BHIM
   /// UPI transactions for non-customers)
   static final uMobile = UpiApplication(
@@ -468,6 +535,7 @@ class UpiApplication {
     iosBundleId: 'com.infrasoft.uboi',
     appName: 'U-Mobile',
   );
+
   /// WhatsApp
   static final whatsApp = UpiApplication(
     androidPackageName: 'com.whatsapp',
@@ -475,6 +543,7 @@ class UpiApplication {
     appName: 'WhatsApp',
     discoveryCustomScheme: 'whatsapp',
   );
+
   /// Yes Bank' app for customers that also includes BHIM UPI transactions for
   /// non-customers
   static final yesBank = UpiApplication(
@@ -482,6 +551,7 @@ class UpiApplication {
     iosBundleId: 'com.yesbank',
     appName: 'Yes Mobile',
   );
+
   /// YuvaPay from UDMA Technologies
   static final yuvaPay = UpiApplication(
     androidPackageName: 'com.udma.yuvapay.app',
@@ -492,7 +562,7 @@ class UpiApplication {
 
   /// Returns the platform-specific package name.
   String toString() {
-    return io.Platform.isAndroid ? androidPackageName : iosBundleId;
+    return io.Platform.isAndroid ? androidPackageName : iosBundleId!;
   }
 
   /// Returns app's name.
