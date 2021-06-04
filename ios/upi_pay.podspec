@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'upi_pay'
-  s.version          = '0.3.0'
+  s.version          = '1.0.0'
   s.summary          = 'Flutter plugin for UPI payments.'
   s.description      = <<-DESC
 A flutter plugin to launch UPI payment applications on Android and iOS towards making UPI payments.
