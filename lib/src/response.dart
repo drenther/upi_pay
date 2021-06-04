@@ -5,14 +5,18 @@ enum UpiTransactionStatus {
   /// UPI transaction submitted and is yet to complete (Android-only)
   /// See `Status` in [UPI Linking Specification](https://www.npci.org.in/sites/default/files/UPI%20Linking%20Specs_ver%201.6.pdf)
   submitted,
+
   /// UPI transaction is successful (Android-only)
   /// See `Status` in [UPI Linking Specification](https://www.npci.org.in/sites/default/files/UPI%20Linking%20Specs_ver%201.6.pdf)
   success,
+
   /// UPI transaction failed (Android-only)
   /// See `Status` in [UPI Linking Specification](https://www.npci.org.in/sites/default/files/UPI%20Linking%20Specs_ver%201.6.pdf)
   failure,
+
   /// UPI payment app launched with transaction parameters (iOS-only)
   launched,
+
   /// UPI payment app launch failed (iOS-only)
   failedToLaunch,
 }
@@ -21,19 +25,25 @@ enum UpiTransactionStatus {
 class UpiTransactionResponse {
   /// See `txnId` in [UPI Linking Specification](https://www.npci.org.in/sites/default/files/UPI%20Linking%20Specs_ver%201.6.pdf)
   /// "Response Parameters" section (Android-only)
-  String _txnId;
+  String? _txnId;
+
   /// See `responseCode` in [UPI Linking Specification](https://www.npci.org.in/sites/default/files/UPI%20Linking%20Specs_ver%201.6.pdf) (Android-only)
-  String _responseCode;
+  String? _responseCode;
+
   /// See `ApprovalRefNo` in [UPI Linking Specification](https://www.npci.org.in/sites/default/files/UPI%20Linking%20Specs_ver%201.6.pdf) (Android-only)
-  String _approvalRefNo;
+  String? _approvalRefNo;
+
   /// Status of transaction on Android / iOS
-  UpiTransactionStatus _status;
+  UpiTransactionStatus? _status;
+
   /// See `txnRef` in [UPI Linking Specification](https://www.npci.org.in/sites/default/files/UPI%20Linking%20Specs_ver%201.6.pdf) (Android-only)
-  String _txnRef;
+  String? _txnRef;
+
   /// Response string in the format specified in [UPI Linking Specification](https://www.npci.org.in/sites/default/files/UPI%20Linking%20Specs_ver%201.6.pdf) (Android-only)
-  String _rawResponse;
+  String? _rawResponse;
+
   /// UPI app launch exception (iOS-only)
-  String _launchError;
+  String? _launchError;
 
   /// Android platform constructor.
   ///
@@ -102,7 +112,7 @@ class UpiTransactionResponse {
   }
 
   /// Getter for [_txnId]. Leads to [UnsupportedError] on iOs.
-  String get txnId {
+  String? get txnId {
     if (io.Platform.isAndroid) {
       return _txnId;
     }
@@ -110,7 +120,7 @@ class UpiTransactionResponse {
   }
 
   /// Getter for [_responseCode]. Leads to [UnsupportedError] on iOs.
-  String get responseCode {
+  String? get responseCode {
     if (io.Platform.isAndroid) {
       return _responseCode;
     }
@@ -119,7 +129,7 @@ class UpiTransactionResponse {
   }
 
   /// Getter for [_approvalRefNo]. Leads to [UnsupportedError] on iOs.
-  String get approvalRefNo {
+  String? get approvalRefNo {
     if (io.Platform.isAndroid) {
       return _approvalRefNo;
     }
@@ -128,10 +138,10 @@ class UpiTransactionResponse {
   }
 
   /// Getter for [_status].
-  UpiTransactionStatus get status => _status;
+  UpiTransactionStatus? get status => _status;
 
   /// Getter for [_txnRef]. Leads to [UnsupportedError] on iOs.
-  String get txnRef {
+  String? get txnRef {
     if (io.Platform.isAndroid) {
       return _txnRef;
     }
@@ -139,7 +149,7 @@ class UpiTransactionResponse {
   }
 
   /// Getter for [_rawResponse]. Leads to [UnsupportedError] on iOs.
-  String get rawResponse {
+  String? get rawResponse {
     if (io.Platform.isAndroid) {
       return _rawResponse;
     }
@@ -147,7 +157,7 @@ class UpiTransactionResponse {
   }
 
   /// Getter for [_launchError]. Leads to [UnsupportedError] on Android.
-  String get launchError {
+  String? get launchError {
     if (io.Platform.isIOS) {
       return _launchError;
     }

@@ -35,7 +35,7 @@ class ApplicationMeta {
   /// On iOS, it creates an [Image] widget from logo stored as part of assets.
   Image iconImage(double dimension) {
     if (io.Platform.isAndroid) {
-      return Image.memory(_icon, width: dimension, height: dimension);
+      return Image.memory(_icon!, width: dimension, height: dimension);
     } else if (io.Platform.isIOS) {
       return Image.asset(
         'assets/apps/ios/${upiApplication.iosBundleId}.png',
@@ -66,14 +66,11 @@ class ApplicationMeta {
     throw UnsupportedError('`preferredOrder` is not available on iOS');
   }
 
-  @Deprecated('Use the `iconImage` cross-platform API instead')
-  Uint8List get icon => _icon;
-
   /// [UpiApplication] representation of the UPI app.
   final UpiApplication upiApplication;
 
   /// The byte-array version of the app's logo (Android-only).
-  final Uint8List _icon;
+  final Uint8List? _icon;
 
   /// Priority of execution. Provided for API response coverage (Android-only).
   /// Not used as of now.

@@ -8,7 +8,7 @@ class _UpiException implements Exception {
 }
 
 class InvalidUpiAddressException extends _UpiException {
-  InvalidUpiAddressException([String msg])
+  InvalidUpiAddressException([String? msg])
       : super(msg ?? 'Invalid UPI Address');
 }
 

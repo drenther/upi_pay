@@ -1,3 +1,8 @@
+## 1.0.0
+
+- Null safety support
+- Recreated project to remove warnings around obsolete embedding version and not including AndroidX
+
 ## 0.3.0
 
 - Support for iOS

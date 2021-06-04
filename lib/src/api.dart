@@ -1,7 +1,6 @@
 import 'dart:async';
 
 // for meta
-import 'package:flutter/material.dart';
 import 'package:upi_pay/src/discovery.dart';
 import 'package:upi_pay/src/meta.dart';
 import 'package:upi_pay/src/method_channel.dart';
@@ -54,13 +53,13 @@ class UpiPay {
   ///
   /// [url]: See `url` parameter in [UPI Linking Specification](https://www.npci.org.in/sites/default/files/UPI%20Linking%20Specs_ver%201.6.pdf)
   static Future<UpiTransactionResponse> initiateTransaction({
-    @required UpiApplication app,
-    @required String receiverUpiAddress,
-    @required String receiverName,
-    @required String transactionRef,
-    @required String amount,
-    String url,
-    String transactionNote,
+    required UpiApplication app,
+    required String receiverUpiAddress,
+    required String receiverName,
+    required String transactionRef,
+    required String amount,
+    String? url,
+    String? transactionNote,
   }) async {
     final transactionDetails = TransactionDetails(
       upiApplication: app,

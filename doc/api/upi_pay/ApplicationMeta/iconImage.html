@@ -12,9 +12,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="../../static-assets/github.css">
-  <link rel="stylesheet" href="../../static-assets/styles.css">
-  <link rel="icon" href="../../static-assets/favicon.png">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
 
   
 </head>
@@ -42,6 +43,52 @@
 <main>
 
 
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-method">iconImage</span> method 
+    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+
+<span class="returntype"><a href="https://api.flutter.dev/flutter/widgets/Image-class.html">Image</a></span>
+<span class="name ">iconImage</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="iconImage-param-dimension"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">dimension</span></span></li>
+</ol>)
+
+      
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Returns an <a href="https://api.flutter.dev/flutter/widgets/Image-class.html">Image</a> widget for the UPI app.</p>
+<p><code>dimension</code> specifies width and height of the <a href="https://api.flutter.dev/flutter/widgets/Image-class.html">Image</a> output.</p>
+<p>On Android, it creates an <a href="https://api.flutter.dev/flutter/widgets/Image-class.html">Image</a> widget from the byte-array of the logo.
+On iOS, it creates an <a href="https://api.flutter.dev/flutter/widgets/Image-class.html">Image</a> widget from logo stored as part of assets.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Image iconImage(double dimension) {
+  if (io.Platform.isAndroid) {
+    return Image.memory(_icon!, width: dimension, height: dimension);
+  } else if (io.Platform.isIOS) {
+    return Image.asset(
+      &#39;assets&#47;apps&#47;ios&#47;${upiApplication.iosBundleId}.png&#39;,
+      package: &#39;upi_pay&#39;,
+      width: dimension,
+      height: dimension,
+    );
+  }
+  throw UnsupportedError(&#39;`iconImage` is available on Android and iOS only&#39;);
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
   <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
     <header id="header-search-sidebar" class="hidden-l">
   <form class="search-sidebar" role="search">
@@ -68,13 +115,12 @@
     <li class="section-title">
       <a href="../../upi_pay/ApplicationMeta-class.html#instance-properties">Properties</a>
     </li>
-    <li><a href="../../upi_pay/ApplicationMeta/application.html">application</a></li>
     <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></li>
-    <li><a class="deprecated" href="../../upi_pay/ApplicationMeta/icon.html">icon</a></li>
     <li><a href="../../upi_pay/ApplicationMeta/packageName.html">packageName</a></li>
     <li><a href="../../upi_pay/ApplicationMeta/preferredOrder.html">preferredOrder</a></li>
     <li><a href="../../upi_pay/ApplicationMeta/priority.html">priority</a></li>
     <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></li>
+    <li><a href="../../upi_pay/ApplicationMeta/upiApplication.html">upiApplication</a></li>
 
     <li class="section-title"><a href="../../upi_pay/ApplicationMeta-class.html#instance-methods">Methods</a></li>
     <li><a href="../../upi_pay/ApplicationMeta/iconImage.html">iconImage</a></li>
@@ -91,51 +137,6 @@
 
   </div><!--/.sidebar-offcanvas-->
 
-  <div id="dartdoc-main-content" class="main-content">
-      <div>
-<h1><span class="kind-method">iconImage</span> method 
-</h1></div>
-
-    <section class="multi-line-signature">
-      
-
-<span class="returntype"><a href="https://api.flutter.dev/flutter/widgets/Image-class.html">Image</a></span>
-<span class="name ">iconImage</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="iconImage-param-dimension"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">dimension</span></span></li>
-</ol>)
-
-      
-
-    </section>
-    
-<section class="desc markdown">
-  <p>Returns an <a href="https://api.flutter.dev/flutter/widgets/Image-class.html">Image</a> widget for the UPI app.</p>
-<p><code>dimension</code> specifies width and height of the <a href="https://api.flutter.dev/flutter/widgets/Image-class.html">Image</a> output.</p>
-<p>On Android, it creates an <a href="https://api.flutter.dev/flutter/widgets/Image-class.html">Image</a> widget from the byte-array of the logo.
-On iOS, it creates an <a href="https://api.flutter.dev/flutter/widgets/Image-class.html">Image</a> widget from logo stored as part of assets.</p>
-</section>
-
-
-    
-<section class="summary source-code" id="source">
-  <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Image iconImage(double dimension) {
-  if (Platform.isAndroid) {
-    return Image.memory(_icon, width: dimension, height: dimension);
-  } else if (Platform.isIOS) {
-    return Image.asset(
-      &#39;assets&#47;apps&#47;ios&#47;${application.iosBundleId}.png&#39;,
-      package: &#39;upi_pay&#39;,
-      width: dimension,
-      height: dimension,
-    );
-  }
-  throw UnsupportedError(&#39;`iconImage` is available on Android and iOS only&#39;);
-}</code></pre>
-</section>
-
-
-  </div> <!-- /.main-content -->
-
   <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
   </div><!--/.sidebar-offcanvas-->
 
@@ -144,15 +145,16 @@ On iOS, it creates an <a href="https://api.flutter.dev/flutter/widgets/Image-cla
 <footer>
   <span class="no-break">
     upi_pay
-      0.3.0
+      1.0.0
   </span>
 
   
 </footer>
 
 
-<script src="../../static-assets/highlight.pack.js"></script>
-<script src="../../static-assets/script.js"></script>
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/script.js?v1"></script>
 
 
 

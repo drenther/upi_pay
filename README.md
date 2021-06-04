@@ -15,7 +15,7 @@ Add this package to your flutter project's `pubspec.yaml` as a dependency as fol
 ```yaml
 dependencies:
   ...
-  upi_pay: ^0.3.0
+  upi_pay: ^1.0.0
 ```
 
 Import the package as follows:

@@ -1,6 +1,6 @@
 PODS:
   - Flutter (1.0.0)
-  - upi_pay (0.3.0):
+  - upi_pay (1.0.0):
     - Flutter
 
 DEPENDENCIES:
@@ -15,7 +15,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
-  upi_pay: 5f045df27f779977236d21bd3fe2d687234cebbf
+  upi_pay: 16008b0cbb4d248b895e587661eab2446926c51e
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 

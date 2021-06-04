@@ -12,9 +12,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="../../static-assets/github.css">
-  <link rel="stylesheet" href="../../static-assets/styles.css">
-  <link rel="icon" href="../../static-assets/favicon.png">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
 
   
 </head>
@@ -42,6 +43,44 @@
 <main>
 
 
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-property">priority</span> property 
+    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
+</h1></div>
+
+
+        
+<section id="getter">
+
+<section class="multi-line-signature">
+  <span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>
+  <span class="name ">priority</span>
+  
+
+</section>
+
+
+<section class="desc markdown">
+  <p>Getter for <code>_priority</code>. Leads to <a href="https://api.flutter.dev/flutter/dart-core/UnsupportedError-class.html">UnsupportedError</a> on iOS.</p>
+</section>
+
+
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">int get priority {
+  if (io.Platform.isAndroid) {
+    return _priority;
+  }
+  throw UnsupportedError(&#39;`priority` is not available on iOS&#39;);
+}</code></pre>
+</section>
+
+</section>
+
+
+  </div> <!-- /.main-content -->
+
   <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
     <header id="header-search-sidebar" class="hidden-l">
   <form class="search-sidebar" role="search">
@@ -68,13 +107,12 @@
     <li class="section-title">
       <a href="../../upi_pay/ApplicationMeta-class.html#instance-properties">Properties</a>
     </li>
-    <li><a href="../../upi_pay/ApplicationMeta/application.html">application</a></li>
     <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></li>
-    <li><a class="deprecated" href="../../upi_pay/ApplicationMeta/icon.html">icon</a></li>
     <li><a href="../../upi_pay/ApplicationMeta/packageName.html">packageName</a></li>
     <li><a href="../../upi_pay/ApplicationMeta/preferredOrder.html">preferredOrder</a></li>
     <li><a href="../../upi_pay/ApplicationMeta/priority.html">priority</a></li>
     <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></li>
+    <li><a href="../../upi_pay/ApplicationMeta/upiApplication.html">upiApplication</a></li>
 
     <li class="section-title"><a href="../../upi_pay/ApplicationMeta-class.html#instance-methods">Methods</a></li>
     <li><a href="../../upi_pay/ApplicationMeta/iconImage.html">iconImage</a></li>
@@ -91,43 +129,6 @@
 
   </div><!--/.sidebar-offcanvas-->
 
-  <div id="dartdoc-main-content" class="main-content">
-      <div>
-<h1><span class="kind-property">priority</span> property 
-</h1></div>
-
-
-        
-<section id="getter">
-
-<section class="multi-line-signature">
-  <span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>
-  <span class="name ">priority</span>
-  
-
-</section>
-
-
-<section class="desc markdown">
-  <p>Getter for <code>_priority</code>. Leads to <a href="https://api.flutter.dev/flutter/dart-core/UnsupportedError-class.html">UnsupportedError</a> on iOS.</p>
-</section>
-
-
-<section class="summary source-code" id="source">
-  <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">int get priority {
-  if (Platform.isAndroid) {
-    return _priority;
-  }
-  throw UnsupportedError(&#39;`priority` is not available on iOS&#39;);
-}</code></pre>
-</section>
-
-</section>
-
-
-  </div> <!-- /.main-content -->
-
   <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
   </div><!--/.sidebar-offcanvas-->
 
@@ -136,15 +137,16 @@
 <footer>
   <span class="no-break">
     upi_pay
-      0.3.0
+      1.0.0
   </span>
 
   
 </footer>
 
 
-<script src="../../static-assets/highlight.pack.js"></script>
-<script src="../../static-assets/script.js"></script>
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/script.js?v1"></script>
 
 
 
