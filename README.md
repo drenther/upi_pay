@@ -4,9 +4,9 @@ Find installed UPI payment apps on your phone and make payments using any one of
 
 Package implements [UPI Deep Linking And Proximity Integration Specification](https://github.com/reeteshranjan/upi_pay/files/6338127/UPI.Linking.Specs_ver.1.6.pdf).
 
-Android | iOS
--|-
-![Android Screen Capture](https://user-images.githubusercontent.com/5516599/115283164-a4e3df00-a168-11eb-878b-c3dbe6e53aa7.gif) | ![IOS Screen Capture](https://user-images.githubusercontent.com/5516599/115283187-aa412980-a168-11eb-9c03-5ae8dce30d78.gif)
+| Android                                                                                                                         | iOS                                                                                                                         |
+| ------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| ![Android Screen Capture](https://user-images.githubusercontent.com/5516599/115283164-a4e3df00-a168-11eb-878b-c3dbe6e53aa7.gif) | ![IOS Screen Capture](https://user-images.githubusercontent.com/5516599/115283187-aa412980-a168-11eb-9c03-5ae8dce30d78.gif) |
 
 ## Getting Started
 
@@ -96,10 +96,11 @@ Future doUpiTransation(ApplicationMeta appMeta) {
 ### Android
 
 #### Flow
-* On Android, the [UPI Deep Linking And Proximity Integration Specification](https://github.com/reeteshranjan/upi_pay/files/6338127/UPI.Linking.Specs_ver.1.6.pdf) is implemented using Intents.
-* An Intent call with transaction request parameters includes the specific UPI app to be invoked.
-* Post the UPI transaction being processed by the chosen Android UPI app, it returns a response as per the format defined in the specification to the package's Android plugin layer.
-* The plugin layer parses this response to create a `UpiTransactionResponse` object that is returned to your calling code. This object clearly indicates the status of the UPI payment, i.e. was it successful, failed or being processed.
+
+- On Android, the [UPI Deep Linking And Proximity Integration Specification](https://github.com/reeteshranjan/upi_pay/files/6338127/UPI.Linking.Specs_ver.1.6.pdf) is implemented using Intents.
+- An Intent call with transaction request parameters includes the specific UPI app to be invoked.
+- Post the UPI transaction being processed by the chosen Android UPI app, it returns a response as per the format defined in the specification to the package's Android plugin layer.
+- The plugin layer parses this response to create a `UpiTransactionResponse` object that is returned to your calling code. This object clearly indicates the status of the UPI payment, i.e. was it successful, failed or being processed.
 
 #### Measures
 
@@ -109,10 +110,10 @@ It is advised that you implement a server-side payment verification on top of th
 
 #### Flow
 
-* On iOS, the [UPI Deep Linking And Proximity Integration Specification](https://github.com/reeteshranjan/upi_pay/files/6338127/UPI.Linking.Specs_ver.1.6.pdf) is implemented using iOS custom schemes.
-* Each UPI payment app can listen to a payment request of the form `upi://pay?...` sent by a caller app to iOS.
-* The specification does not let you specify the target app's identifier in this request. On iOS, there is no other disambiguation measure available such as any ordering of the UPI payment apps that can be retrieved using any iOS APIs. Hence, it's impossible to know which UPI payment app will be invoked.
-* One of the applicable apps gets invoked and it processes the payment. The custom schemes mechanism has no way to return a transaction status to your calling code. The calling code can only know if a UPI payment app was launched successfully or not.
+- On iOS, the [UPI Deep Linking And Proximity Integration Specification](https://github.com/reeteshranjan/upi_pay/files/6338127/UPI.Linking.Specs_ver.1.6.pdf) is implemented using iOS custom schemes.
+- Each UPI payment app can listen to a payment request of the form `upi://pay?...` sent by a caller app to iOS.
+- The specification does not let you specify the target app's identifier in this request. On iOS, there is no other disambiguation measure available such as any ordering of the UPI payment apps that can be retrieved using any iOS APIs. Hence, it's impossible to know which UPI payment app will be invoked.
+- One of the applicable apps gets invoked and it processes the payment. The custom schemes mechanism has no way to return a transaction status to your calling code. The calling code can only know if a UPI payment app was launched successfully or not.
 
 #### How does the package then implement `getInstalledUpiApps`?
 
@@ -128,8 +129,8 @@ bool isAppReallyDiscovered(ApplicationMeta applicationMeta) {
 
 #### Measures
 
-* You will have to implement a payment verification on top of functionality available through this package.
-* You should distinguish discovered and supported-only apps using the mechanism in the above section. The example app can be used for reference.
+- You will have to implement a payment verification on top of functionality available through this package.
+- You should distinguish discovered and supported-only apps using the mechanism in the above section. The example app can be used for reference.
 
 ## UPI Apps' Functional Status Dynamics
 
@@ -143,10 +144,10 @@ However; various applications have been accepting requests without merchant deta
 
 Over last few months, few applications have started changing their behaviour around non-merchant payments and one or more of the following are seen in few apps:
 
-* An implicit "unverified source" warning or a direct warning indicating that merchant data in the request is not correct
-* Z7 error, "Transaction Frequency Limit Exceeded": See [UPI Error and Response Codes](https://github.com/reeteshranjan/upi_pay/files/6338492/PHN6WKI7_UPI_Error_and_Response_Codes_V_2_3_1.pdf)
-* U16 error, "Risk Threshold Exceeded", see [UPI Error and Response Codes](https://github.com/reeteshranjan/upi_pay/files/6338492/PHN6WKI7_UPI_Error_and_Response_Codes_V_2_3_1.pdf)
-* An implicit "Security error"
+- An implicit "unverified source" warning or a direct warning indicating that merchant data in the request is not correct
+- Z7 error, "Transaction Frequency Limit Exceeded": See [UPI Error and Response Codes](https://github.com/reeteshranjan/upi_pay/files/6338492/PHN6WKI7_UPI_Error_and_Response_Codes_V_2_3_1.pdf)
+- U16 error, "Risk Threshold Exceeded", see [UPI Error and Response Codes](https://github.com/reeteshranjan/upi_pay/files/6338492/PHN6WKI7_UPI_Error_and_Response_Codes_V_2_3_1.pdf)
+- An implicit "Security error"
 
 This behaviour sometimes is not consistent even for the same app. For example, WhatsApp successfully completes transactions on iOS; but rejects non-merchant transactions on Android.
 
@@ -163,3 +164,29 @@ Several BHIM apps have stopped working on <iOS 13.5. This package's iOS support 
 ### Love to experiment yourself?
 
 Default behaviour of the `getInstalledUpiApps` API is to give you only the completely successfully working UPI apps. You can make the package return other apps by passing relevant values for parameters of this API. Please see API documentation. To support this experimentation, we would add further tweaking to allow you to access UPI apps not seen and supported by this package shortly on Android.
+
+## Contributors ✨
+
+Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<table>
+  <tr>
+    <td align="center"><a href="https://drenther.xyz"><img src="https://avatars3.githubusercontent.com/u/12991390?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Soumyajit Pathak</b></sub></a><br /><a href="https://github.com/drenther/upi_pay/commits?author=drenther" title="Code">💻</a> <a href="#ideas-drenther" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/drenther/upi_pay/pulls?q=is%3Apr+reviewed-by%3Adrenther" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/drenther/upi_pay/commits?author=drenther" title="Documentation">📖</a> <a href="#maintenance-drenther" title="Maintenance">🚧</a> <a href="#research-drenther" title="Research">🔬</a></td>
+    <td align="center"><a href="http://www.piaxis.tech/"><img src="https://avatars0.githubusercontent.com/u/5516599?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Reetesh Ranjan</b></sub></a><br /><a href="https://github.com/drenther/upi_pay/commits?author=reeteshranjan" title="Code">💻</a> <a href="#ideas-reeteshranjan" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/drenther/upi_pay/pulls?q=is%3Apr+reviewed-by%3Areeteshranjan" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/drenther/upi_pay/commits?author=reeteshranjan" title="Documentation">📖</a> <a href="#maintenance-reeteshranjan" title="Maintenance">🚧</a> <a href="#research-reeteshranjan" title="Research">🔬</a></td>
+    <td align="center"><a href="https://sharadchand.com"><img src="https://avatars3.githubusercontent.com/u/29191131?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Sharad Chand</b></sub></a><br /><a href="https://github.com/drenther/upi_pay/commits?author=pepsighan" title="Code">💻</a> <a href="#ideas-pepsighan" title="Ideas, Planning, & Feedback">🤔</a> <a href="#research-pepsighan" title="Research">🔬</a></td>
+    <td align="center"><a href="https://github.com/masterashu"><img src="https://avatars0.githubusercontent.com/u/39612799?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Adam Markon</b></sub></a><br /><a href="https://github.com/drenther/upi_pay/commits?author=masterashu" title="Code">💻</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+This project follows the all-contributors specification. Contributions of any kind welcome and will be recognised!
+
+## Other related solutions
+
+- [upi_india](https://pub.dev/packages/upi_india) [(repo)](https://github.com/azhar1038/UPI-Plugin-Flutter) - Another solid flutter package for payment gateway free UPI integration. We often share issues faced / solution approaches and more. Go check them out as well!
