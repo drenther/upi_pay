@@ -1,5 +1,11 @@
 # upi_pay
 
+[![version](https://img.shields.io/pub/v/upi_pay)](https://pub.dev/packages/upi_pay)
+
+<img src="https://user-images.githubusercontent.com/12991390/120928518-947cc900-c702-11eb-976b-dc06f077229c.png" width="150">
+
+---
+
 Find installed UPI payment apps on your phone and make payments using any one of them.
 
 Package implements [UPI Deep Linking And Proximity Integration Specification](https://github.com/reeteshranjan/upi_pay/files/6338127/UPI.Linking.Specs_ver.1.6.pdf).
