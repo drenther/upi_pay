@@ -42,7 +42,8 @@ class _ScreenState extends State<Screen> {
         (Random.secure().nextDouble() * 10).toStringAsFixed(2);
 
     Future.delayed(Duration(milliseconds: 0), () async {
-      _apps = await UpiPay.getInstalledUpiApplications();
+      _apps = await UpiPay.getInstalledUpiApplications(
+          statusType: UpiApplicationDiscoveryAppStatusType.all);
       setState(() {});
     });
   }
@@ -281,10 +282,10 @@ class _ScreenState extends State<Screen> {
         .toLowerCase()
         .compareTo(b.upiApplication.getAppName().toLowerCase()));
     return GridView.count(
-      crossAxisCount: 3,
+      crossAxisCount: 4,
       shrinkWrap: true,
-      mainAxisSpacing: 8,
-      crossAxisSpacing: 8,
+      mainAxisSpacing: 4,
+      crossAxisSpacing: 4,
       // childAspectRatio: 1.6,
       physics: NeverScrollableScrollPhysics(),
       children: apps
