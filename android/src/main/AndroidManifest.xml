@@ -1,3 +1,84 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.drenther.upi_pay">
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="upi" />
+        </intent>
+    </queries>
+    <queries>
+        <package android:name="com.SIBMobile" />
+        <package android:name="com.YesBank" />
+        <package android:name="com.atomyes" />
+        <package android:name="com.aubank.aupay.bhimupi" />
+        <package android:name="com.bankofbaroda.upi" />
+        <package android:name="com.canarabank.mobility" />
+        <package android:name="com.citrus.citruspay" />
+        <package android:name="com.csam.icici.bank.imobile" />
+        <package android:name="com.cub.plus.gui" />
+        <package android:name="com.cub.wallet.gui" />
+        <package android:name="com.dbs.in.digitalbank" />
+        <package android:name="com.dreamplug.androidapp" />
+        <package android:name="com.enstage.wibmo.hdfc" />
+        <package android:name="com.equitasbank.upi" />
+        <package android:name="com.euronet.iobupi" />
+        <package android:name="com.fampay.in" />
+        <package android:name="com.finacus.jetpay" />
+        <package android:name="com.finacus.tranzapp" />
+        <package android:name="com.finopaytech.bpayfino" />
+        <package android:name="com.fisglobal.bandhanupi.app" />
+        <package android:name="com.fisglobal.syndicateupi.app" />
+        <package android:name="com.freecharge.android" />
+        <package android:name="com.fss.idfcpsp" />
+        <package android:name="com.fss.ippbpsp" />
+        <package android:name="com.fss.jnkpsp" />
+        <package android:name="com.fss.pnbpsp" />
+        <package android:name="com.fss.unbipsp" />
+        <package android:name="com.fss.vijayapsp" />
+        <package android:name="com.google.android.apps.nbu.paisa.user" />
+        <package android:name="com.idbibank.paywiz" />
+        <package android:name="com.infra.boiupi" />
+        <package android:name="com.infrasoft.uboi" />
+        <package android:name="com.infrasofttech.centralbankupi" />
+        <package android:name="com.infrasofttech.indianbankupi" />
+        <package android:name="com.infrasofttech.mahaupi" />
+        <package android:name="com.jio.myjio" />
+        <package android:name="com.khaalijeb.inkdrops" />
+        <package android:name="com.lcode.allahabadupi" />
+        <package android:name="com.lcode.corpupi" />
+        <package android:name="com.lcode.csbupi" />
+        <package android:name="com.lcode.dlbupi" />
+        <package android:name="com.lcode.smartz" />
+        <package android:name="com.lcode.ucoupi" />
+        <package android:name="com.lvbank.upaay" />
+        <package android:name="com.mgs.hsbcupi" />
+        <package android:name="com.mgs.induspsp" />
+        <package android:name="com.mgs.obcbank" />
+        <package android:name="com.microlucid.mudrapay.android" />
+        <package android:name="com.mipay.in.wallet" />
+        <package android:name="com.mobikwik_new" />
+        <package android:name="com.mobileware.upipsb" />
+        <package android:name="com.myairtelapp" />
+        <package android:name="com.mycompany.kvb" />
+        <package android:name="com.olive.andhra.upi" />
+        <package android:name="com.olive.dcb.upi" />
+        <package android:name="com.omegaon_internet_pvt_ltd" />
+        <package android:name="com.phonepe.app" />
+        <package android:name="com.rblbank.mobank" />
+        <package android:name="com.rblbank.upi" />
+        <package android:name="com.realmepay.payments" />
+        <package android:name="com.sbi.upi" />
+        <package android:name="com.snapwork.hdfc" />
+        <package android:name="com.truecaller" />
+        <package android:name="com.udma.yuvapay.app" />
+        <package android:name="com.ultracash.payment.customer" />
+        <package android:name="com.upi.axispay" />
+        <package android:name="com.upi.federalbank.org.lotza" />
+        <package android:name="com.whatsapp" />
+        <package android:name="in.amazon.mShop.android.shopping" />
+        <package android:name="in.cointab.app" />
+        <package android:name="in.org.npci.upiapp" />
+        <package android:name="money.bullet" />
+        <package android:name="net.one97.paytm" />
+    </queries>
 </manifest>

@@ -1,3 +1,7 @@
+## 1.0.1
+
+- Android API version 30 support
+
 ## 1.0.0
 
 - Null safety support
