@@ -28,6 +28,7 @@ If applicable, add screenshots to help explain your problem.
 - Device: [e.g. OnePlus Nord]
 - Package Version: [e.g. v1.0.0]
 - UPI Applications in the device: [e.g. - GPay, Paytm]
+- Play Store: [e.g. Google, Mi, Vivo]
 - Other UPI / Payment packages used in the app: [e.g. - razorpay_flutter]
 
 ### Additional context
