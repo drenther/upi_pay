@@ -75,7 +75,7 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
       val intent = Intent(Intent.ACTION_VIEW, uri)
       intent.setPackage(app)
 
-      if (intent.resolveActivity(activity.packageManager) == null) {
+      if (intent.resolveActivity(activity!!.packageManager) == null) {
         this.success("activity_unavailable")
         return
       }
@@ -94,7 +94,7 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
     val uri = uriBuilder.build()
     val intent = Intent(Intent.ACTION_VIEW, uri)
 
-    val packageManager = activity.packageManager
+    val packageManager = activity!!.packageManager
 
     try {
       val activities = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
