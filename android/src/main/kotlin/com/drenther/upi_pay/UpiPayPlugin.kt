@@ -1,5 +1,6 @@
 package com.drenther.upi_pay
 
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -8,21 +9,28 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.util.Base64
 import android.util.Log
+import androidx.annotation.NonNull
+import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.plugin.common.PluginRegistry.ActivityResultListener
-import io.flutter.plugin.common.PluginRegistry.Registrar
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import java.io.ByteArrayOutputStream
 
-class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodChannel) : MethodCallHandler, ActivityResultListener {
-  private val activity = registrar.activity()
+class UpiPayPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
+  /// The MethodChannel that will the communication between Flutter and native Android
+  ///
+  /// This local reference serves to register the plugin with the Flutter Engine and unregister it
+  /// when the Flutter Engine is detached from the Activity
+  private lateinit var channel : MethodChannel
+  private var activity: Activity? = null
 
   private var result: Result? = null
   private var requestCodeNumber = 201119
 
-  var hasResponded = false
+  private var hasResponded = false
 
   override fun onMethodCall(call: MethodCall, result: Result) {
     hasResponded = false
@@ -75,12 +83,12 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
       val intent = Intent(Intent.ACTION_VIEW, uri)
       intent.setPackage(app)
 
-      if (intent.resolveActivity(activity.packageManager) == null) {
+      if (activity?.let { intent.resolveActivity(it.packageManager) } == null) {
         this.success("activity_unavailable")
         return
       }
 
-      activity.startActivityForResult(intent, requestCodeNumber)
+      activity?.startActivityForResult(intent, requestCodeNumber)
     } catch (ex: Exception) {
       Log.e("upi_pay", ex.toString())
       this.success("failed_to_open_app")
@@ -94,29 +102,25 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
     val uri = uriBuilder.build()
     val intent = Intent(Intent.ACTION_VIEW, uri)
 
-    val packageManager = activity.packageManager
+    val packageManager = activity?.packageManager
 
     try {
-      val activities = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+      val activities = packageManager?.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
 
       // Convert the activities into a response that can be transferred over the channel.
-      val activityResponse = activities.map {
-        val packageName = it.activityInfo.packageName
-        val drawable = packageManager.getApplicationIcon(packageName)
+      val activityResponse = activities?.map {
+          val packageName = it.activityInfo.packageName
+          val drawable = packageManager.getApplicationIcon(packageName)
 
-        val bitmap = getBitmapFromDrawable(drawable)
-        val icon = if (bitmap != null) {
-          encodeToBase64(bitmap)
-        } else {
-          null
-        }
+          val bitmap = getBitmapFromDrawable(drawable)
+          val icon = encodeToBase64(bitmap)
 
-        mapOf(
-                "packageName" to packageName,
-                "icon" to icon,
-                "priority" to it.priority,
-                "preferredOrder" to it.preferredOrder
-        )
+          mapOf(
+            "packageName" to packageName,
+            "icon" to icon,
+            "priority" to it.priority,
+            "preferredOrder" to it.preferredOrder
+          )
       }
 
       result?.success(activityResponse)
@@ -132,10 +136,10 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
     return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.NO_WRAP)
   }
 
-  private fun getBitmapFromDrawable(drawable: Drawable): Bitmap? {
+  private fun getBitmapFromDrawable(drawable: Drawable): Bitmap {
     val bmp: Bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
     val canvas = Canvas(bmp)
-    drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight())
+    drawable.setBounds(0, 0, canvas.width, canvas.height)
     drawable.draw(canvas)
     return bmp
   }
@@ -147,29 +151,46 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
     }
   }
 
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
-    if (requestCodeNumber == requestCode && result != null) {
-      if (data != null) {
-        try {
-          val response = data.getStringExtra("response")!!
-          this.success(response)
-        } catch (ex: Exception) {
-          this.success("invalid_response")
-        }
-      } else {
-        this.success("user_cancelled")
-      }
-    }
-    return true
+
+  override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "upi_pay")
+    channel.setMethodCallHandler(this)
+  }
+//
+//  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
+//    if (requestCodeNumber == requestCode && result != null) {
+//      if (data != null) {
+//        try {
+//          val response = data.getStringExtra("response")!!
+//          this.success(response)
+//        } catch (ex: Exception) {
+//          this.success("invalid_response")
+//        }
+//      } else {
+//        this.success("user_cancelled")
+//      }
+//    }
+//    return true
+//  }
+
+
+  override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+    channel.setMethodCallHandler(null)
   }
 
-  companion object {
-    @JvmStatic
-    fun registerWith(registrar: Registrar) {
-      val channel = MethodChannel(registrar.messenger(), "upi_pay")
-      val plugin = UpiPayPlugin(registrar, channel)
-      registrar.addActivityResultListener(plugin)
-      channel.setMethodCallHandler(plugin)
-    }
+  override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+    activity = binding.activity
+  }
+
+  override fun onDetachedFromActivityForConfigChanges() {
+    activity = null
+  }
+
+  override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+    activity = binding.activity
+  }
+
+  override fun onDetachedFromActivity() {
+    activity = null
   }
 }
