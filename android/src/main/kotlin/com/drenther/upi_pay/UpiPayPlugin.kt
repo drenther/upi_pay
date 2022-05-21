@@ -156,23 +156,6 @@ class UpiPayPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "upi_pay")
     channel.setMethodCallHandler(this)
   }
-//
-//  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
-//    if (requestCodeNumber == requestCode && result != null) {
-//      if (data != null) {
-//        try {
-//          val response = data.getStringExtra("response")!!
-//          this.success(response)
-//        } catch (ex: Exception) {
-//          this.success("invalid_response")
-//        }
-//      } else {
-//        this.success("user_cancelled")
-//      }
-//    }
-//    return true
-//  }
-
 
   override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
     channel.setMethodCallHandler(null)
