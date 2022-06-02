@@ -17,9 +17,10 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
+import io.flutter.plugin.common.PluginRegistry
 import java.io.ByteArrayOutputStream
 
-class UpiPayPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
+class UpiPayPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, PluginRegistry.ActivityResultListener {
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -89,6 +90,7 @@ class UpiPayPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
       }
 
       activity?.startActivityForResult(intent, requestCodeNumber)
+
     } catch (ex: Exception) {
       Log.e("upi_pay", ex.toString())
       this.success("failed_to_open_app")
@@ -152,6 +154,23 @@ class UpiPayPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
   }
 
 
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
+    if (requestCodeNumber == requestCode && result != null) {
+      if (data != null) {
+        try {
+          val response = data.getStringExtra("response")!!
+          this.success(response)
+        } catch (ex: Exception) {
+          this.success("invalid_response")
+        }
+      } else {
+        this.success("user_cancelled")
+      }
+    }
+    return true
+  }
+
+
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "upi_pay")
     channel.setMethodCallHandler(this)
@@ -176,4 +195,5 @@ class UpiPayPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
   override fun onDetachedFromActivity() {
     activity = null
   }
+
 }
