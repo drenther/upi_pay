@@ -30,6 +30,7 @@ class _ScreenState extends State<Screen> {
 
   final _upiAddressController = TextEditingController();
   final _amountController = TextEditingController();
+  final _upiPayPlugin = UpiPay();
 
   bool _isUpiEditable = false;
   List<ApplicationMeta>? _apps;
@@ -42,7 +43,7 @@ class _ScreenState extends State<Screen> {
         (Random.secure().nextDouble() * 10).toStringAsFixed(2);
 
     Future.delayed(Duration(milliseconds: 0), () async {
-      _apps = await UpiPay.getInstalledUpiApplications(
+      _apps = await _upiPayPlugin.getInstalledUpiApplications(
           statusType: UpiApplicationDiscoveryAppStatusType.all);
       setState(() {});
     });
@@ -57,8 +58,7 @@ class _ScreenState extends State<Screen> {
 
   void _generateAmount() {
     setState(() {
-      _amountController.text =
-          (Random.secure().nextDouble() * 10).toStringAsFixed(2);
+      _amountController.text = '10';
     });
   }
 
@@ -77,7 +77,7 @@ class _ScreenState extends State<Screen> {
     final transactionRef = Random.secure().nextInt(1 << 32).toString();
     print("Starting transaction with id $transactionRef");
 
-    final a = await UpiPay.initiateTransaction(
+    final a = await _upiPayPlugin.initiateTransaction(
       amount: _amountController.text,
       app: app.upiApplication,
       receiverName: 'Sharad',
@@ -189,9 +189,9 @@ class _ScreenState extends State<Screen> {
               child: Text('Initiate Transaction',
                   style: Theme.of(context)
                       .textTheme
-                      .button!
+                      .bodyMedium!
                       .copyWith(color: Colors.white)),
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).primaryColor,
               height: 48,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6)),
@@ -212,7 +212,7 @@ class _ScreenState extends State<Screen> {
             margin: EdgeInsets.only(bottom: 12),
             child: Text(
               'Pay Using',
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           if (_apps != null) _appsGrid(_apps!.map((e) => e).toList()),
@@ -232,14 +232,14 @@ class _ScreenState extends State<Screen> {
             child: Text(
               'One of these will be invoked automatically by your phone to '
               'make a payment',
-              style: Theme.of(context).textTheme.bodyText2,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ),
           Container(
             margin: EdgeInsets.only(bottom: 12),
             child: Text(
               'Detected Installed Apps',
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           if (_apps != null) _discoverableAppsGrid(),
@@ -247,7 +247,7 @@ class _ScreenState extends State<Screen> {
             margin: EdgeInsets.only(top: 12, bottom: 12),
             child: Text(
               'Other Supported Apps (Cannot detect)',
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           if (_apps != null) _nonDiscoverableAppsGrid(),

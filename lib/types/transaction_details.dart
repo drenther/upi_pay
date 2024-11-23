@@ -1,6 +1,6 @@
 import 'package:decimal/decimal.dart';
-import 'package:upi_pay/src/applications.dart';
-import 'package:upi_pay/src/exceptions.dart';
+import 'package:upi_pay/types/applications.dart';
+import 'package:upi_pay/types/exceptions.dart';
 
 class TransactionDetails {
   static const String _currency = 'INR';
@@ -21,11 +21,11 @@ class TransactionDetails {
     required this.payeeAddress,
     required this.payeeName,
     required this.transactionRef,
-    this.currency: TransactionDetails._currency,
+    this.currency = TransactionDetails._currency,
     required String amount,
     this.url,
-    this.merchantCode: '',
-    this.transactionNote: 'UPI Transaction',
+    this.merchantCode = '',
+    this.transactionNote = 'UPI Transaction',
   }) : amount = Decimal.parse(amount) {
     if (!_checkIfUpiAddressIsValid(payeeAddress)) {
       throw InvalidUpiAddressException();

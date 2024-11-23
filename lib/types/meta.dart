@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:universal_io/io.dart' as io;
-import 'package:upi_pay/src/applications.dart';
+import 'package:upi_pay/types/applications.dart';
 import 'package:flutter/material.dart';
 
 /// Represents a UPI payment app and more relevant information.

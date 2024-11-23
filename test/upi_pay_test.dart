@@ -1,20 +1,53 @@
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:upi_pay/types/transaction_details.dart';
+import 'package:upi_pay/upi_pay.dart';
+import 'package:upi_pay/src/platform_interface.dart';
+import 'package:upi_pay/src/method_channel.dart';
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+
+class MockUpiPayPlatform
+    with MockPlatformInterfaceMixin
+    implements UpiPayPlatform {
+  @override
+  Future<String?> getPlatformVersion() => Future.value('42');
+
+  @override
+  Future<bool?> canLaunch(String scheme) {
+    // TODO: implement canLaunch
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Map>?> getInstalledUpiApps() {
+    // TODO: implement getInstalledUpiApps
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<String?> initiateTransaction(TransactionDetails transactionDetails) {
+    // TODO: implement initiateTransaction
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool?> launch(TransactionDetails transactionDetails) {
+    // TODO: implement launch
+    throw UnimplementedError();
+  }
+}
 
 void main() {
-  const MethodChannel channel = MethodChannel('upi_pay');
+  final UpiPayPlatform initialPlatform = UpiPayPlatform.instance;
 
-  setUp(() {
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      return '42';
-    });
-  });
-
-  tearDown(() {
-    channel.setMockMethodCallHandler(null);
+  test('$MethodChannelUpiPay is the default instance', () {
+    expect(initialPlatform, isInstanceOf<MethodChannelUpiPay>());
   });
 
   test('getPlatformVersion', () async {
-    print('Dummy Test');
+    UpiPay upiPayPlugin = UpiPay();
+    MockUpiPayPlatform fakePlatform = MockUpiPayPlatform();
+    UpiPayPlatform.instance = fakePlatform;
+
+    expect(await upiPayPlugin.getPlatformVersion(), '42');
   });
 }

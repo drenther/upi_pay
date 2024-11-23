@@ -1,47 +1,55 @@
 import 'package:universal_io/io.dart' as io;
 import 'package:flutter/services.dart';
-import 'package:upi_pay/src/transaction_details.dart';
+import 'package:upi_pay/types/transaction_details.dart';
+import 'package:flutter/foundation.dart';
 
-class UpiMethodChannel {
-  MethodChannel _channel = MethodChannel('upi_pay');
-  static final _singleton = UpiMethodChannel._inner();
-  factory UpiMethodChannel() {
-    return _singleton;
+import 'platform_interface.dart';
+
+/// An implementation of [UpiPayPlatform] that uses method channels.
+class MethodChannelUpiPay extends UpiPayPlatform {
+  /// The method channel used to interact with the native platform.
+  @visibleForTesting
+  final methodChannel = const MethodChannel('upi_pay');
+
+  @override
+  Future<String?> getPlatformVersion() async {
+    final version =
+        await methodChannel.invokeMethod<String>('getPlatformVersion');
+    return version;
   }
-  UpiMethodChannel._inner();
 
   Future<String?> initiateTransaction(
       TransactionDetails transactionDetails) async {
-    if (io.Platform.isAndroid) {
-      return await _channel.invokeMethod<String>(
-          'initiateTransaction', transactionDetails.toJson());
+    if (!io.Platform.isAndroid) {
+      throw UnsupportedError(
+          'The `initiateTransaction` call is supported only on Android');
     }
-    throw UnsupportedError(
-        'The `initiateTransaction` call is supported only on Android');
+    return methodChannel.invokeMethod<String>(
+        'initiateTransaction', transactionDetails.toJson());
   }
 
   Future<bool?> launch(TransactionDetails transactionDetails) async {
-    if (io.Platform.isIOS) {
-      return await _channel
-          .invokeMethod<bool>('launch', {'uri': transactionDetails.toString()});
+    if (!io.Platform.isIOS) {
+      throw UnsupportedError('The `launch` call is supported only on iOS');
     }
-    throw UnsupportedError('The `launch` call is supported only on iOS');
+    return methodChannel
+        .invokeMethod<bool>('launch', {'uri': transactionDetails.toString()});
   }
 
   Future<List<Map<dynamic, dynamic>>?> getInstalledUpiApps() async {
-    if (io.Platform.isAndroid) {
-      return await _channel
-          .invokeListMethod<Map<dynamic, dynamic>>('getInstalledUpiApps');
+    if (!io.Platform.isAndroid) {
+      throw UnsupportedError('The `getInstalledUpiApps` call is supported only '
+          'on Android');
     }
-    throw UnsupportedError('The `getInstalledUpiApps` call is supported only '
-        'on Android');
+    return methodChannel
+        .invokeListMethod<Map<dynamic, dynamic>>('getInstalledUpiApps');
   }
 
   Future<bool?> canLaunch(String scheme) async {
-    if (io.Platform.isIOS) {
-      return await _channel
-          .invokeMethod<bool>('canLaunch', {'uri': scheme + "://"});
+    if (!io.Platform.isIOS) {
+      throw UnsupportedError('The `canLaunch` call is supported only on iOS');
     }
-    throw UnsupportedError('The `canLaunch` call is supported only on iOS');
+    return methodChannel
+        .invokeMethod<bool>('canLaunch', {'uri': scheme + "://"});
   }
 }

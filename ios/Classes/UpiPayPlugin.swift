@@ -1,16 +1,18 @@
 import Flutter
 import UIKit
 
-public class SwiftUpiPayPlugin: NSObject, FlutterPlugin {
+public class UpiPayPlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "upi_pay", binaryMessenger: registrar.messenger())
-    let instance = SwiftUpiPayPlugin()
+    let instance = UpiPayPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
 
-  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) -> Void {
+  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     let arguments = call.arguments as? NSDictionary
-    switch(call.method) {
+    switch call.method {
+    case "getPlatformVersion":
+      result("iOS " + UIDevice.current.systemVersion)
     case "canLaunch":
       let uri = (arguments!["uri"] as? String)!
       result(self.canLaunch(uri: uri))
