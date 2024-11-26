@@ -1,3 +1,11 @@
+## 1.1.0
+
+- Upgrade to latest build environment (Flutter 3.24.5, Gradle 8.10, Java 23)
+- Upgraded dependency packages
+- Required changes in build files due to upgrades in Flutter and Gradle
+- Created new Flutter project and merged it in, bringin in some other minor
+  changes in various project files
+
 ## 1.0.1
 
 - Android API version 30 support
