@@ -1,22 +1,28 @@
 PODS:
   - Flutter (1.0.0)
+  - integration_test (0.0.1):
+    - Flutter
   - upi_pay (1.0.0):
     - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
+  - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - upi_pay (from `.symlinks/plugins/upi_pay/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
+  integration_test:
+    :path: ".symlinks/plugins/integration_test/ios"
   upi_pay:
     :path: ".symlinks/plugins/upi_pay/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
-  upi_pay: 16008b0cbb4d248b895e587661eab2446926c51e
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
+  upi_pay: a7d6fab40381ea9b2f9f8d56da43829926ce1ff0
 
-PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+PODFILE CHECKSUM: 0db4cc7016905767245764f5296317024ac37827
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.16.2

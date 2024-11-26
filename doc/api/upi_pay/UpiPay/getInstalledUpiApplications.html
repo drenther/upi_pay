@@ -97,7 +97,7 @@ for now. Setting it to any other value will lead to <a href="https://api.flutter
   if (_upiApplicationStatuses.isEmpty) {
     return [];
   }
-  return await _discovery.discover(
+  return _discovery.discover(
     upiMethodChannel: _channel,
     applicationStatusMap: _upiApplicationStatuses,
     paymentType: paymentType,

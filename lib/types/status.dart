@@ -617,7 +617,7 @@ class UpiApplicationAndroidStatus extends UpiApplicationPlatformStatus {
   UpiApplicationAndroidStatus({
     required UpiApplicationSetupStatus setup,
     required UpiApplicationLinkingSupport linkingSupport,
-    bool warnsUnverifiedSourceForNonMerchant: false,
+    bool warnsUnverifiedSourceForNonMerchant = false,
     this.nonMerchantPaymentStatus,
   }) : super(
             setup: setup,
@@ -631,7 +631,7 @@ class UpiApplicationIosStatus extends UpiApplicationPlatformStatus {
   UpiApplicationIosStatus({
     required UpiApplicationSetupStatus setup,
     required UpiApplicationLinkingSupport linkingSupport,
-    bool warnsUnverifiedSourceForNonMerchant: false,
+    bool warnsUnverifiedSourceForNonMerchant = false,
     this.nonMerchantPaymentStatus,
   }) : super(
             setup: setup,
@@ -648,7 +648,7 @@ class UpiApplicationPlatformStatus {
   UpiApplicationPlatformStatus({
     required this.setup,
     required this.linkingSupport,
-    this.warnsUnverifiedSourceForNonMerchant: false,
+    this.warnsUnverifiedSourceForNonMerchant = false,
   });
 }
 

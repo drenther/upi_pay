@@ -2,22 +2,22 @@ group 'com.drenther.upi_pay'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.4.32'
+    ext.kotlin_version = "1.9.24"
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath("com.android.tools.build:gradle:8.7.2")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
     }
 }
 
-rootProject.allprojects {
+allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
@@ -25,16 +25,27 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 30
+    if (project.android.hasProperty("namespace")) {
+        namespace = "com.drenther.upi_pay"
+    }
+
+    compileSdk = 34
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
 
     sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
+        main.java.srcDirs += "src/main/kotlin"
+        test.java.srcDirs += "src/test/kotlin"
     }
-    defaultConfig {
-        minSdkVersion 16
-    }
-}
 
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    defaultConfig {
+        minSdk = 21
+    }
 }

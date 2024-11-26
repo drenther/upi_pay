@@ -2,14 +2,15 @@ import 'dart:async';
 
 // for meta
 import 'package:upi_pay/src/discovery.dart';
-import 'package:upi_pay/src/meta.dart';
-import 'package:upi_pay/src/method_channel.dart';
-import 'package:upi_pay/src/response.dart';
-import 'package:upi_pay/src/status.dart';
-import 'package:upi_pay/src/applications.dart';
-import 'package:upi_pay/src/exceptions.dart';
+import 'package:upi_pay/src/platform_interface.dart';
+import 'package:upi_pay/types/discovery.dart';
+import 'package:upi_pay/types/meta.dart';
+import 'package:upi_pay/types/response.dart';
+import 'package:upi_pay/types/status.dart';
+import 'package:upi_pay/types/applications.dart';
+import 'package:upi_pay/types/exceptions.dart';
 import 'package:upi_pay/src/transaction.dart';
-import 'package:upi_pay/src/transaction_details.dart';
+import 'package:upi_pay/types/transaction_details.dart';
 
 /// Helps with getting installed UPI apps and making payments using them.
 ///
@@ -18,9 +19,8 @@ import 'package:upi_pay/src/transaction_details.dart';
 /// The [initiateTransaction] API helps with making a transaction using a chosen
 /// UPI payment app.
 class UpiPay {
-  static final UpiMethodChannel _channel = UpiMethodChannel();
-  static final UpiApplicationDiscovery _discovery = UpiApplicationDiscovery();
-  static final UpiTransactionHelper _transactionHelper = UpiTransactionHelper();
+  final UpiApplicationDiscovery _discovery = UpiApplicationDiscovery();
+  final UpiTransactionHelper _transactionHelper = UpiTransactionHelper();
 
   /// Start a UPI Transaction.
   ///
@@ -52,7 +52,7 @@ class UpiPay {
   /// [UPI Linking Specification](https://www.npci.org.in/sites/default/files/UPI%20Linking%20Specs_ver%201.6.pdf).
   ///
   /// [url]: See `url` parameter in [UPI Linking Specification](https://www.npci.org.in/sites/default/files/UPI%20Linking%20Specs_ver%201.6.pdf)
-  static Future<UpiTransactionResponse> initiateTransaction({
+  Future<UpiTransactionResponse> initiateTransaction({
     required UpiApplication app,
     required String receiverUpiAddress,
     required String receiverName,
@@ -70,7 +70,7 @@ class UpiPay {
       url: url,
       transactionNote: transactionNote,
     );
-    return await _transactionHelper.transact(_channel, transactionDetails);
+    return _transactionHelper.transact(transactionDetails);
   }
 
   /// Finds installed UPI payment applications.
@@ -92,10 +92,10 @@ class UpiPay {
   ///
   /// [paymentType] must be [UpiApplicationDiscoveryAppPaymentType.nonMerchant]
   /// for now. Setting it to any other value will lead to [UnsupportedError].
-  static Future<List<ApplicationMeta>> getInstalledUpiApplications({
-    UpiApplicationDiscoveryAppPaymentType paymentType:
+  Future<List<ApplicationMeta>> getInstalledUpiApplications({
+    UpiApplicationDiscoveryAppPaymentType paymentType =
         UpiApplicationDiscoveryAppPaymentType.nonMerchant,
-    UpiApplicationDiscoveryAppStatusType statusType:
+    UpiApplicationDiscoveryAppStatusType statusType =
         UpiApplicationDiscoveryAppStatusType.working,
   }) async {
     if (paymentType != UpiApplicationDiscoveryAppPaymentType.nonMerchant) {
@@ -105,12 +105,15 @@ class UpiPay {
     if (_upiApplicationStatuses.isEmpty) {
       return [];
     }
-    return await _discovery.discover(
-      upiMethodChannel: _channel,
+    return _discovery.discover(
       applicationStatusMap: _upiApplicationStatuses,
       paymentType: paymentType,
       statusType: statusType,
     );
+  }
+
+  Future<String?> getPlatformVersion() async {
+    return UpiPayPlatform.instance.getPlatformVersion();
   }
 
   static final Map<UpiApplication, UpiApplicationStatus>

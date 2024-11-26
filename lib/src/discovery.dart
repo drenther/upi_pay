@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:universal_io/io.dart' as io;
-import 'package:upi_pay/src/applications.dart';
-import 'package:upi_pay/src/method_channel.dart';
-import 'package:upi_pay/src/status.dart';
-import 'package:upi_pay/src/meta.dart';
+import 'package:upi_pay/src/platform_interface.dart';
+import 'package:upi_pay/types/applications.dart';
+import 'package:upi_pay/types/discovery.dart';
+import 'package:upi_pay/types/status.dart';
+import 'package:upi_pay/types/meta.dart';
 
 class UpiApplicationDiscovery implements _PlatformDiscoveryBase {
   final discovery = io.Platform.isAndroid
@@ -20,22 +21,20 @@ class UpiApplicationDiscovery implements _PlatformDiscoveryBase {
 
   @override
   Future<List<ApplicationMeta>> discover({
-    required UpiMethodChannel upiMethodChannel,
     required Map<UpiApplication, UpiApplicationStatus> applicationStatusMap,
-    UpiApplicationDiscoveryAppPaymentType paymentType:
+    UpiApplicationDiscoveryAppPaymentType paymentType =
         UpiApplicationDiscoveryAppPaymentType.nonMerchant,
-    UpiApplicationDiscoveryAppStatusType statusType:
+    UpiApplicationDiscoveryAppStatusType statusType =
         UpiApplicationDiscoveryAppStatusType.working,
   }) async {
-    if (io.Platform.isAndroid || io.Platform.isIOS) {
-      return await discovery!.discover(
-        upiMethodChannel: upiMethodChannel,
-        applicationStatusMap: applicationStatusMap,
-        paymentType: paymentType,
-        statusType: statusType,
-      );
+    if (!(io.Platform.isAndroid || io.Platform.isIOS)) {
+      throw UnsupportedError('Discovery is available only on Android and iOS');
     }
-    throw UnsupportedError('Discovery is available only on Android and iOS');
+    return discovery!.discover(
+      applicationStatusMap: applicationStatusMap,
+      paymentType: paymentType,
+      statusType: statusType,
+    );
   }
 }
 
@@ -48,14 +47,13 @@ class _AndroidDiscovery implements _PlatformDiscoveryBase {
 
   @override
   Future<List<ApplicationMeta>> discover({
-    required UpiMethodChannel upiMethodChannel,
     required Map<UpiApplication, UpiApplicationStatus> applicationStatusMap,
-    UpiApplicationDiscoveryAppPaymentType paymentType:
+    UpiApplicationDiscoveryAppPaymentType paymentType =
         UpiApplicationDiscoveryAppPaymentType.nonMerchant,
-    UpiApplicationDiscoveryAppStatusType statusType:
+    UpiApplicationDiscoveryAppStatusType statusType =
         UpiApplicationDiscoveryAppStatusType.working,
   }) async {
-    final appsList = await upiMethodChannel.getInstalledUpiApps();
+    final appsList = await UpiPayPlatform.instance.getInstalledUpiApps();
     if (appsList == null) return [];
     final List<ApplicationMeta> retList = [];
     appsList.forEach((app) {
@@ -121,11 +119,10 @@ class _IosDiscovery implements _PlatformDiscoveryBase {
 
   @override
   Future<List<ApplicationMeta>> discover({
-    required UpiMethodChannel upiMethodChannel,
     required Map<UpiApplication, UpiApplicationStatus> applicationStatusMap,
-    UpiApplicationDiscoveryAppPaymentType paymentType:
+    UpiApplicationDiscoveryAppPaymentType paymentType =
         UpiApplicationDiscoveryAppPaymentType.nonMerchant,
-    UpiApplicationDiscoveryAppStatusType statusType:
+    UpiApplicationDiscoveryAppStatusType statusType =
         UpiApplicationDiscoveryAppStatusType.working,
   }) async {
     Map<String, UpiApplication> discoveryMap = {};
@@ -145,7 +142,7 @@ class _IosDiscovery implements _PlatformDiscoveryBase {
     for (int idx = 0; idx < discoveryMap.length; ++idx) {
       final scheme = keys[idx];
       try {
-        final bool? result = await upiMethodChannel.canLaunch(scheme);
+        final bool? result = await UpiPayPlatform.instance.canLaunch(scheme);
         // print('$scheme, launch-able: $result');
         if (result == true) {
           discovered.add(discoveryMap[scheme]!);
@@ -197,11 +194,10 @@ class _IosDiscovery implements _PlatformDiscoveryBase {
 
 abstract class _PlatformDiscoveryBase {
   Future<List<ApplicationMeta>> discover({
-    required UpiMethodChannel upiMethodChannel,
     required Map<UpiApplication, UpiApplicationStatus> applicationStatusMap,
-    UpiApplicationDiscoveryAppPaymentType paymentType:
+    UpiApplicationDiscoveryAppPaymentType paymentType =
         UpiApplicationDiscoveryAppPaymentType.nonMerchant,
-    UpiApplicationDiscoveryAppStatusType statusType:
+    UpiApplicationDiscoveryAppStatusType statusType =
         UpiApplicationDiscoveryAppStatusType.working,
   });
 }
@@ -218,45 +214,4 @@ int _castToInt(dynamic val) {
     return val;
   }
   throw TypeError();
-}
-
-/// Represents the type of payments in the apps that user wants to access.
-///
-/// Passed as [paymentType] parameter of [UpiPay.getInstalledUpiApplications]
-/// API.
-enum UpiApplicationDiscoveryAppPaymentType {
-  /// Individual-to-individual payment type. If this type is passed, then
-  /// the package finds packages for which such payment works. Currently, it's
-  /// the only type accepted.
-  nonMerchant,
-
-  /// Merchant payment type. Currently not accepted. Will represent merchant
-  /// payment type once they are supported.
-  merchant,
-
-  /// Both individual-to-individual and merchant payment types. Not accepted
-  /// currently.
-  both,
-}
-
-/// Represents the UPI payment working status of apps that user wants to access.
-///
-/// Passed as [statusType] parameter of [UpiPay.getInstalledUpiApplications]
-/// API.
-enum UpiApplicationDiscoveryAppStatusType {
-  /// Indicates that user wants UPI apps with any working status (they must be
-  /// discoverable, though)
-  all,
-
-  /// Indicates that user wants UPI apps that complete the UPI payment and may
-  /// or may not involve the "unverified source" warning. Currently, only
-  /// individual-to-individual payments are implemented, and this status type
-  /// is relevant for them only as some apps give this warning in the payment
-  /// process and take confirmation from user before proceeding for this type
-  /// of payments. For merchant payments, this type may become irrelevant.
-  workingWithWarnings,
-
-  /// Indicates that user wants UPI apps that complete the UPI payment without
-  /// the "unverified source" warning
-  working,
 }
