@@ -17,7 +17,7 @@ Add this package to your flutter project's `pubspec.yaml` as a dependency as fol
 ```yaml
 dependencies:
   ...
-  upi_pay: ^1.0.1
+  upi_pay: ^1.1.0
 ```
 
 Import the package as follows:
@@ -50,10 +50,18 @@ In `Runner/Info.plist` add or modify the `LSApplicationQueriesSchemes` key so it
 
 ### Usage
 
+#### Create plugin instance
+
+**Note**: This should be done once in your application.
+
+```dart
+final upiPay = UpiPay();
+```
+
 #### Get list of installed apps
 
 ```dart
-final List<ApplicationMeta> appMetaList = await UpiPay.getInstalledUpiApps();
+final List<ApplicationMeta> appMetaList = await upiPay.getInstalledUpiApps();
 ```
 
 #### Show an app's details
@@ -68,7 +76,7 @@ Widget appWidget(ApplicationMeta appMeta) {
         margin: EdgeInsets.only(top: 4),
         alignment: Alignment.center,
         child: Text(
-          appMeta.application.getAppName(),
+          appMeta.upiApplication.getAppName(),
           textAlign: TextAlign.center,
         ),
       ),
@@ -81,7 +89,7 @@ Widget appWidget(ApplicationMeta appMeta) {
 
 ```dart
 Future doUpiTransation(ApplicationMeta appMeta) {
-  final UpiTransactionResponse response = await UpiPay.initiateTransaction(
+  final UpiTransactionResponse response = await upiPay.initiateTransaction(
     amount: '100.00',
     app: appMeta.application,
     receiverName: 'John Doe',
@@ -136,9 +144,15 @@ bool isAppReallyDiscovered(ApplicationMeta applicationMeta) {
 
 ## UPI Apps' Functional Status Dynamics
 
-UPI standards and systems are evolving, and accordingly behaviour and functionality of the UPI payment apps are changing. See [Apps](https://github.com/reeteshranjan/upi_pay/blob/master/APPS.md) for details of current functional status of various applications that were verified by us.
+UPI standards and systems are evolving, and accordingly behaviour and functionality of the UPI payment apps are changing.
+
+See [Apps](https://github.com/reeteshranjan/upi_pay/blob/master/APPS.md) for details of current functional status of various applications that were verified by us.
+
+**Note**: [Apps](https://github.com/reeteshranjan/upi_pay/blob/master/APPS.md) has application behaviour recorded in April 2021. No further exhaustive testing has been done to reflect status. The latest version of the package - 1.1.0 - did not include an instance of exhaustive testing and verification of the huge gamut of BHIM UPI apps as done in 2021.
 
 ### Support for merchant and non-merchant payments
+
+[Tracking issue](https://github.com/drenther/upi_pay/issues/38)
 
 The [UPI Deep Linking And Proximity Integration Specification](https://github.com/reeteshranjan/upi_pay/files/6338127/UPI.Linking.Specs_ver.1.6.pdf) is designed for merchant payments. It includes parameters in payment request that can be provided only if the payment was made to a merchant e.g. the merchant code (`mc` parameter), and a signature (crypto-hash) of the request created using merchant's private key.
 
@@ -161,7 +175,7 @@ It's seen that post the Bank mergers of 2020-21 some of the bank apps have stopp
 
 ### iOS minimum versions
 
-Several BHIM apps have stopped working on <iOS 13.5. This package's iOS support is verified on iPhone with iOS 14+.
+Several BHIM apps have stopped working on iOS versions less than 13.5. This package's iOS support is verified on iPhone with iOS 14+.
 
 ### Love to experiment yourself?
 
