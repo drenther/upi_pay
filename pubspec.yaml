@@ -6,7 +6,7 @@ version: 1.1.0
 homepage: https://github.com/drenther/upi_pay
 
 environment:
-  sdk: ">=3.5.4"
+  sdk: ">=3.5.4 <4.0.0"
   flutter: ">=3.24.5"
 
 dependencies:
